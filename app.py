@@ -1,5 +1,6 @@
 from pathlib import Path
 import base64
+import html
 import streamlit as st
 
 # A Little Gift From Sweetheart
@@ -46,7 +47,7 @@ html,body,.stApp,[data-testid="stAppViewContainer"]{
 div[data-testid="stCode"],.stCode,pre{display:none!important}
 div[data-testid="stButton"] button{
     border:3px solid #70465e;border-radius:0;background:#f4c0d0;color:#58384d;
-    font-family:'Press Start 2P',monospace;font-size:10px;
+    font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:700;
     box-shadow:4px 4px 0 #9e7189;padding:.75rem 1rem
 }
 div[data-testid="stButton"] button:hover{
@@ -90,7 +91,7 @@ div[data-testid="stButton"] button:hover{
 .room-title{
     position:absolute;z-index:4;left:1.5%;top:2%;padding:9px 11px;
     color:#604454;background:#fff0df;border:3px solid #805a61;
-    box-shadow:3px 3px #b88d87;font:9px 'Press Start 2P';line-height:1.8
+    box-shadow:3px 3px #b88d87;font:700 12px 'Segoe UI',Arial,sans-serif;line-height:1.8
 }
 .khoa-sprite{
     position:absolute;z-index:5;left:48%;bottom:3%;height:66%;max-width:19%;
@@ -103,19 +104,22 @@ div[data-testid="stButton"] button:hover{
     box-shadow:5px 5px #b88799;animation:popIn .5s ease 1s both;opacity:0
 }
 @keyframes popIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
-.notification-head{font:8px 'Press Start 2P';line-height:1.8;color:#98647a;border-bottom:2px solid #e5cbd0;padding-bottom:7px}
-.notification-message{font:22px 'VT323';line-height:1.15;color:#493447;padding-top:7px}
-.hint{color:#f7d8e4;text-align:center;margin:14px auto 8px;font:10px 'Press Start 2P';line-height:1.8}
+.notification-head{font:700 11px 'Segoe UI',Arial,sans-serif;line-height:1.8;color:#98647a;border-bottom:2px solid #e5cbd0;padding-bottom:7px}
+.notification-message{font:18px 'Segoe UI',Arial,sans-serif;line-height:1.15;color:#493447;padding-top:7px}
+.hint{color:#f7d8e4;text-align:center;margin:14px auto 8px;font:700 12px 'Segoe UI',Arial,sans-serif;line-height:1.8}
 .chat-panel{
     width:min(720px,94vw);margin:18px auto 30px;padding:17px;
     background:#fff5ec;border:5px solid #76536a;box-shadow:6px 6px #9c7186
 }
-.chat-header{color:#89576e;font:12px 'Press Start 2P';border-bottom:3px solid #eed9df;padding-bottom:12px;line-height:1.8}
+.chat-header{color:#89576e;font:700 14px 'Segoe UI',Arial,sans-serif;border-bottom:3px solid #eed9df;padding-bottom:12px;line-height:1.8}
 .chat-message{display:flex;align-items:center;gap:13px;margin:15px 0}
 .chat-avatar{width:76px;height:92px;object-fit:contain;image-rendering:pixelated;flex:0 0 auto}
-.chat-bubble{max-width:80%;padding:10px 14px;color:#573c4b;background:#f8dce7;border:3px solid #d99bb1;font:23px 'VT323';line-height:1.2}
+.chat-bubble{max-width:80%;padding:10px 14px;color:#573c4b;background:#f8dce7;border:3px solid #d99bb1;font:17px 'Segoe UI',Arial,sans-serif;line-height:1.2}
 .chat-bubble.player{margin-left:auto;background:#e6edf8;border-color:#aabbd8}
-.chat-caption{text-align:center;color:#896a78;font:9px 'Press Start 2P';line-height:1.9;margin:10px 0}
+.chat-message.player-row{justify-content:flex-end}
+.chat-message.player-row .chat-bubble{margin-left:0}
+.chat-panel,.chat-panel *{font-family:'Segoe UI',Arial,sans-serif!important;overflow-wrap:anywhere}
+.chat-caption{text-align:center;color:#896a78;font:700 12px 'Segoe UI',Arial,sans-serif;line-height:1.9;margin:10px 0}
 @media(max-width:700px){
     .room-page{padding:8px 1vw 18px}
     .room-frame{min-height:420px;aspect-ratio:4/3}
@@ -166,16 +170,32 @@ else:
             st.session_state.chat_open = True
             st.rerun()
     else:
+        # Render the entire chat in ONE HTML block. Streamlit Markdown cannot
+        # keep a div open across separate st.markdown calls.
+        reply = st.session_state.reply
+        conversation = f"""
+          <div class="chat-message player-row">
+            <div class="chat-bubble player">{html.escape(reply)}</div>
+          </div>
+          <div class="chat-message">
+            <img class="chat-avatar" src="{image_uri(MEE_MEO)}" alt="Mẹ Meo">
+            <div class="chat-bubble">dạaaa</div>
+          </div>
+          <div class="chat-caption">MẸ MEO ĐÃ NHẮN LẠI ♡</div>
+        """ if reply is not None else ""
+
         st.markdown(f"""
         <div class="chat-panel">
-          <div class="chat-header">MẸ MEO <span style="float:right;font-size:8px">ĐANG HOẠT ĐỘNG</span></div>
+          <div class="chat-header">MẸ MEO <span style="float:right;font-size:11px">ĐANG HOẠT ĐỘNG</span></div>
           <div class="chat-message">
             <img class="chat-avatar" src="{image_uri(MEE_MEO)}" alt="Mẹ Meo">
             <div class="chat-bubble">em chuẩn bị xong rùi, anh qua rước em nhóoo</div>
           </div>
+          {conversation}
+        </div>
         """, unsafe_allow_html=True)
 
-        if st.session_state.reply is None:
+        if reply is None:
             st.markdown('<div class="chat-caption">ĐĂNG KHOA NÊN TRẢ LỜI THẾ NÀO?</div>', unsafe_allow_html=True)
             choices = [
                 "okeyy, anh qua liền",
@@ -187,16 +207,3 @@ else:
                 if st.button(choice, key=f"reply_{i}", use_container_width=True):
                     st.session_state.reply = choice
                     st.rerun()
-        else:
-            st.markdown(
-                f'<div class="chat-message"><div class="chat-bubble player">{st.session_state.reply}</div></div>',
-                unsafe_allow_html=True
-            )
-            st.markdown(f"""
-              <div class="chat-message">
-                <img class="chat-avatar" src="{image_uri(MEE_MEO)}" alt="Mẹ Meo">
-                <div class="chat-bubble">dạaaa</div>
-              </div>
-              <div class="chat-caption">MẸ MEO ĐÃ NHẮN LẠI ♡</div>
-            """, unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
