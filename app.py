@@ -34,7 +34,13 @@ st.markdown("""
 :root { --ink:#493344; --pink:#ed8cae; --cream:#fff5e9; }
 .stApp { background:#ead3d2; color:var(--ink); }
 #MainMenu, footer, header {visibility:hidden;}
-.block-container {max-width:1180px; padding-top:.5rem; padding-bottom:1.5rem;}
+.block-container {
+  max-width:none !important; width:100vw !important;
+  padding:0 !important; margin:0 !important;
+}
+.stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"],
+[data-testid="stMainBlockContainer"] {margin:0 !important; padding:0 !important;}
+[data-testid="stMainBlockContainer"] {max-width:none !important;}
 /* Keep the game clean: no accidental code panels or Streamlit chrome. */
 div[data-testid="stCode"], .stCode, pre {display:none !important;}
 div[data-testid="stButton"] button {
@@ -48,12 +54,24 @@ div[data-testid="stButton"] button:hover {
 }
 /* Start is a transparent clickable hit-area positioned over the START button
    already drawn in the supplied title artwork. */
-.st-key-title_screen {position:relative; width:100%; max-width:960px; margin:0 auto;}
-.title-wrap {position:relative; width:100%; margin:0 auto;}
-.title-wrap img {width:100%; display:block; border:0; border-radius:0; image-rendering:pixelated;}
+.st-key-title_screen {
+  position:fixed !important; inset:0 !important;
+  width:100vw !important; height:100vh !important;
+  margin:0 !important; padding:0 !important; overflow:hidden !important;
+  z-index:100 !important;
+}
+.st-key-title_screen [data-testid="stMarkdownContainer"] {margin:0 !important; padding:0 !important;}
+.title-wrap {position:absolute; inset:0; width:100vw; height:100vh; margin:0; padding:0;}
+.title-wrap img {
+  position:absolute; inset:0; width:100vw; height:100vh;
+  display:block; border:0; border-radius:0;
+  object-fit:fill; image-rendering:pixelated;
+}
 .st-key-title_screen div[data-testid="stButton"] {
-  position:absolute; left:65.4%; top:66.8%; width:18.5%; height:12%;
-  z-index:10; margin:0;
+  position:absolute !important;
+  left:65.4vw !important; top:66.8vh !important;
+  width:18.5vw !important; height:12vh !important;
+  z-index:101 !important; margin:0 !important; padding:0 !important;
 }
 .st-key-title_screen div[data-testid="stButton"] button {
   width:100%; height:100%; min-height:0; padding:0;
@@ -108,10 +126,17 @@ div[data-testid="stButton"] button:hover {
 .reply-bubble {background:#e6edf8;border-color:#aabbd8;margin-left:auto;}
 .small-note {text-align:center;color:#805d6c;font:11px 'Press Start 2P',monospace;line-height:1.8;}
 div[data-testid="stMarkdownContainer"] p {font-family:'VT323',monospace;font-size:22px;}
+@supports (height: 100dvh) {
+ .st-key-title_screen, .title-wrap {height:100dvh !important;}
+ .title-wrap img {height:100dvh !important;}
+ .st-key-title_screen div[data-testid="stButton"] {top:66.8dvh !important;height:12dvh !important;}
+}
 @media(max-width:700px){
  .scene{min-height:490px}.hero{height:38%;left:40%;max-width:30%}
  .phone-toast{width:48%;font-size:12px}.desk{width:38%}
- .st-key-title_screen div[data-testid="stButton"]{left:65.4%;top:66.8%;width:18.5%;height:12%}
+ .st-key-title_screen div[data-testid="stButton"]{
+   left:65.4vw !important;top:66.8vh !important;width:18.5vw !important;height:12vh !important;
+ }
 }
 </style>
 """, unsafe_allow_html=True)
