@@ -30,86 +30,102 @@ if "reply" not in st.session_state:
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 :root { --ink:#493344; --pink:#ed8cae; --cream:#fff5e9; }
-.stApp { background:#f7e9e7; color:var(--ink); }
+.stApp { background:#ead3d2; color:var(--ink); }
 #MainMenu, footer, header {visibility:hidden;}
-.block-container {max-width: 1180px; padding-top: 1.2rem; padding-bottom: 2rem;}
+.block-container {max-width:1180px; padding-top:.5rem; padding-bottom:1.5rem;}
+/* Keep the game clean: no accidental code panels or Streamlit chrome. */
+div[data-testid="stCode"], .stCode, pre {display:none !important;}
 div[data-testid="stButton"] button {
-  border: 3px solid #7a465f; border-radius: 8px; background:#ffd0df;
-  color:#63384d; font-family:'Nunito',sans-serif; font-weight:900;
-  box-shadow: 0 5px 0 #9d6078; transition:transform .12s, box-shadow .12s;
+  border:3px solid #76516a; border-radius:0; background:#ffd0df;
+  color:#63384d; font-family:'Press Start 2P',monospace; font-size:11px;
+  box-shadow:4px 4px 0 #9d6078; transition:transform .08s;
 }
 div[data-testid="stButton"] button:hover {
-  background:#ffe0e9; color:#63384d; border-color:#7a465f;
-  transform:translateY(2px); box-shadow:0 3px 0 #9d6078;
+  background:#ffe0e9; color:#63384d; border-color:#76516a;
+  transform:translate(2px,2px); box-shadow:2px 2px 0 #9d6078;
 }
-.title-wrap {position:relative; width:100%; max-width:960px; margin:0 auto;}
-.title-wrap img {width:100%; display:block; border:4px solid #68415b; border-radius:12px; image-rendering:pixelated;}
-.title-start {text-align:center; margin-top:-84px; position:relative; z-index:3;}
-.title-start div[data-testid="stButton"] {max-width:210px; margin:0 auto;}
-.title-start button {font-size:1.15rem !important; padding:.55rem 2rem !important;}
+/* Start is a transparent clickable hit-area positioned over the START button
+   already drawn in the supplied title artwork. */
+.st-key-title_screen {position:relative; width:100%; max-width:960px; margin:0 auto;}
+.title-wrap {position:relative; width:100%; margin:0 auto;}
+.title-wrap img {width:100%; display:block; border:0; border-radius:0; image-rendering:pixelated;}
+.st-key-title_screen div[data-testid="stButton"] {
+  position:absolute; left:65.4%; top:66.8%; width:18.5%; height:12%;
+  z-index:10; margin:0;
+}
+.st-key-title_screen div[data-testid="stButton"] button {
+  width:100%; height:100%; min-height:0; padding:0;
+  opacity:0; border:0; background:transparent; box-shadow:none;
+  color:transparent; font-size:0;
+}
+.st-key-title_screen div[data-testid="stButton"] button:hover {
+  opacity:0; background:transparent; border:0; box-shadow:none; transform:none;
+}
 .scene {
-  position:relative; overflow:hidden; min-height:650px; border:5px solid #74566a;
-  border-radius:10px; background:linear-gradient(#f7d8c9 0%,#f4c9b8 55%,#c88e79 100%);
-  box-shadow:0 8px 0 #a77d83; animation:fadeIn 1.35s ease both;
+  position:relative; overflow:hidden; min-height:650px; border:6px solid #654957;
+  border-radius:0; background:#e9bba9; box-shadow:8px 8px 0 #9a7477;
+  animation:fadeIn 1.35s ease both; image-rendering:pixelated;
 }
 @keyframes fadeIn {from{opacity:0} to{opacity:1}}
 .wall {position:absolute; inset:0 0 31% 0; background:
-  repeating-linear-gradient(90deg,transparent 0 118px,rgba(137,91,89,.08) 119px 122px),
-  linear-gradient(#f8dfd1,#f2cbbd);}
+  repeating-linear-gradient(90deg,transparent 0 62px,rgba(119,76,76,.10) 62px 65px),
+  repeating-linear-gradient(0deg,transparent 0 62px,rgba(119,76,76,.08) 62px 65px),
+  #f1d0bf;}
 .floor {position:absolute; left:0;right:0;bottom:0;height:31%;background:
-  repeating-linear-gradient(0deg,rgba(99,61,56,.16) 0 3px,transparent 3px 54px),
-  repeating-linear-gradient(90deg,transparent 0 145px,rgba(99,61,56,.12) 146px 149px),
-  #b98070; border-top:8px solid #956b65;}
-.window {position:absolute;top:7%;left:6%;width:25%;height:34%;border:9px solid #8d5b55;background:linear-gradient(#f7b6a4,#fbe3b9);box-shadow:inset 0 0 0 5px #f8d7c4;}
-.window:before {content:"";position:absolute;left:50%;height:100%;border-left:5px solid #8d5b55}
-.window:after {content:"";position:absolute;top:50%;width:100%;border-top:5px solid #8d5b55}
-.curtain {position:absolute;top:5%;left:4%;width:29%;height:39%;border-left:16px solid #d58c91;border-right:16px solid #d58c91;pointer-events:none;}
-.poster {position:absolute;right:8%;top:7%;width:12%;height:20%;background:#f8e8c8;border:6px solid #936a5c;display:grid;place-items:center;font-size:2rem;}
-.desk {position:absolute;right:8%;bottom:31%;width:34%;height:17%;background:#875744;border:6px solid #684638;border-radius:3px;box-shadow:0 8px 0 #684638;}
-.desk:before {content:"";position:absolute;left:8%;right:8%;top:100%;height:85px;background:linear-gradient(90deg,#80513e 0 12%,transparent 12% 88%,#80513e 88%); }
-.laptop {position:absolute;left:38%;top:-53%;width:27%;height:54%;background:#55545d;border:5px solid #34333d;border-radius:5px 5px 0 0;}
-.laptop:after {content:"";position:absolute;left:-15%;right:-15%;bottom:-8px;height:8px;background:#b6a9a3;border-radius:2px;}
-.screen-glow {position:absolute;inset:8%;background:linear-gradient(135deg,#9bc5bd,#e9d6a5);}
-.chair {position:absolute;right:28%;bottom:16%;width:10%;height:12%;background:#76504a;border:5px solid #5a3d3b;border-radius:8px 8px 2px 2px;}
-.chair:after {content:"";position:absolute;left:12%;right:12%;top:100%;height:38px;border-left:6px solid #5a3d3b;border-right:6px solid #5a3d3b;}
-.mattress {position:absolute;left:7%;bottom:9%;width:37%;height:17%;background:#f4e8df;border:7px solid #9d6e67;border-radius:16px 16px 5px 5px;box-shadow:inset 0 -13px #dfc6bd;}
-.pillow {position:absolute;left:11%;bottom:21%;width:13%;height:7%;background:#fff5ec;border:4px solid #d7b8ae;border-radius:10px;}
-.wardrobe {position:absolute;left:43%;top:12%;width:17%;height:48%;background:#a86f55;border:7px solid #754d42;box-shadow:inset 0 0 0 4px #c38d6e;}
+  repeating-linear-gradient(0deg,rgba(83,52,49,.22) 0 4px,transparent 4px 42px),
+  repeating-linear-gradient(90deg,transparent 0 100px,rgba(83,52,49,.18) 100px 104px),
+  #a96f61; border-top:8px solid #79534e;}
+.window {position:absolute;top:7%;left:6%;width:25%;height:34%;border:10px solid #79504c;background:#f4c3a9;box-shadow:inset 0 0 0 5px #f8dfc9;}
+.window:before {content:"";position:absolute;left:50%;height:100%;border-left:6px solid #79504c}
+.window:after {content:"";position:absolute;top:50%;width:100%;border-top:6px solid #79504c}
+.curtain {position:absolute;top:5%;left:4%;width:29%;height:39%;border-left:18px solid #c77e87;border-right:18px solid #c77e87;pointer-events:none;}
+.poster {position:absolute;right:8%;top:7%;width:12%;height:20%;background:#f5e4bd;border:7px solid #795b4e;display:grid;place-items:center;font-size:2rem;border-radius:0;}
+.desk {position:absolute;right:8%;bottom:31%;width:34%;height:17%;background:#80513d;border:7px solid #5e3d34;border-radius:0;box-shadow:0 8px 0 #5e3d34;}
+.desk:before {content:"";position:absolute;left:8%;right:8%;top:100%;height:85px;background:linear-gradient(90deg,#704735 0 12%,transparent 12% 88%,#704735 88%);}
+.laptop {position:absolute;left:38%;top:-53%;width:27%;height:54%;background:#55545d;border:6px solid #34333d;border-radius:0;}
+.laptop:after {content:"";position:absolute;left:-15%;right:-15%;bottom:-8px;height:8px;background:#aaa09a;}
+.screen-glow {position:absolute;inset:8%;background:#9bc5bd;}
+.chair {position:absolute;right:28%;bottom:16%;width:10%;height:12%;background:#76504a;border:6px solid #513b39;border-radius:0;}
+.chair:after {content:"";position:absolute;left:12%;right:12%;top:100%;height:38px;border-left:6px solid #513b39;border-right:6px solid #513b39;}
+.mattress {position:absolute;left:7%;bottom:9%;width:37%;height:17%;background:#eee0d5;border:7px solid #91645d;border-radius:0;box-shadow:inset 0 -13px #d8bcb1;}
+.pillow {position:absolute;left:11%;bottom:21%;width:13%;height:7%;background:#fff2e6;border:5px solid #cba99f;border-radius:0;}
+.wardrobe {position:absolute;left:43%;top:12%;width:17%;height:48%;background:#a86f55;border:7px solid #754d42;box-shadow:inset 0 0 0 4px #c38d6e;border-radius:0;}
 .wardrobe:before {content:"";position:absolute;left:50%;height:100%;border-left:4px solid #754d42}
-.wardrobe:after {content:"";position:absolute;left:45%;top:45%;height:9px;width:9px;background:#f0d59c;border-radius:50%;box-shadow:22px 0 #f0d59c;}
-.room-label {position:absolute;left:2%;top:2%;background:#fff4e9dd;border:2px solid #9b6d70;padding:6px 12px;border-radius:6px;font:700 13px 'Nunito';}
+.wardrobe:after {content:"";position:absolute;left:45%;top:45%;height:9px;width:9px;background:#f0d59c;box-shadow:22px 0 #f0d59c;}
+.room-label {position:absolute;left:2%;top:2%;background:#fff0dd;border:3px solid #805a61;padding:7px 10px;border-radius:0;font:12px 'Press Start 2P',monospace;}
 .hero {position:absolute;left:44%;bottom:23%;height:45%;width:auto;max-width:23%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(4px 5px 0 #75504b);}
-.phone-toast {position:absolute;right:3%;top:4%;width:min(330px,42%);background:#fffaf7;border:3px solid #76536a;border-radius:12px;padding:13px 16px;box-shadow:5px 6px 0 #a8798c;animation:popIn .45s ease 1.2s both;opacity:0;}
-@keyframes popIn {0%{opacity:0;transform:translateY(-20px) scale(.92)}100%{opacity:1;transform:translateY(0) scale(1)}}
-.toast-head {font:800 13px 'Nunito';color:#98647a;display:flex;justify-content:space-between;border-bottom:1px solid #f0dce3;padding-bottom:6px;margin-bottom:7px;}
-.toast-body {font:700 15px 'Nunito';color:#493344;}
-.phone-panel {max-width:700px;margin:20px auto 0;background:#fffaf7;border:4px solid #76536a;border-radius:12px;padding:16px;box-shadow:0 6px 0 #c18da0;}
-.chat-top {font:900 17px 'Nunito';color:#8a536d;border-bottom:2px solid #f0dce3;padding-bottom:10px;}
+.phone-toast {position:absolute;right:3%;top:4%;width:min(330px,42%);background:#fff3e8;border:4px solid #76536a;border-radius:0;padding:13px 16px;box-shadow:5px 6px 0 #a8798c;animation:popIn .45s ease 1.2s both;opacity:0;}
+@keyframes popIn {0%{opacity:0;transform:translateY(-20px)}100%{opacity:1;transform:translateY(0)}}
+.toast-head {font:12px 'Press Start 2P',monospace;color:#98647a;border-bottom:2px solid #e5c9cf;padding-bottom:8px;margin-bottom:9px;line-height:1.7;}
+.toast-body {font:22px 'VT323',monospace;color:#493344;}
+.phone-panel {max-width:700px;margin:20px auto 0;background:#fff3e8;border:5px solid #76536a;border-radius:0;padding:16px;box-shadow:6px 6px 0 #c18da0;}
+.chat-top {font:14px 'Press Start 2P',monospace;color:#8a536d;border-bottom:3px solid #f0dce3;padding-bottom:12px;line-height:1.7;}
 .chat-line {display:flex;align-items:flex-end;gap:12px;margin:15px 0;}
 .chat-line img {width:72px;height:90px;object-fit:contain;image-rendering:pixelated;}
-.bubble {background:#f8dce7;border:2px solid #d99bb1;border-radius:14px 14px 14px 3px;padding:11px 15px;font:800 15px 'Nunito';color:#573c4b;max-width:80%;}
-.reply-bubble {background:#e6edf8;border-color:#aabbd8;border-radius:14px 14px 3px 14px;margin-left:auto;}
-.small-note {text-align:center;color:#936d7b;font:700 12px 'Nunito';}
-div[data-testid="stButton"] button[kind="secondary"] {font-size:14px;}
+.bubble {background:#f8dce7;border:3px solid #d99bb1;border-radius:0;padding:11px 15px;font:23px 'VT323',monospace;color:#573c4b;max-width:80%;}
+.reply-bubble {background:#e6edf8;border-color:#aabbd8;margin-left:auto;}
+.small-note {text-align:center;color:#805d6c;font:11px 'Press Start 2P',monospace;line-height:1.8;}
+div[data-testid="stMarkdownContainer"] p {font-family:'VT323',monospace;font-size:22px;}
 @media(max-width:700px){
  .scene{min-height:490px}.hero{height:38%;left:40%;max-width:30%}
  .phone-toast{width:48%;font-size:12px}.desk{width:38%}
+ .st-key-title_screen div[data-testid="stButton"]{left:65.4%;top:66.8%;width:18.5%;height:12%}
 }
 </style>
 """, unsafe_allow_html=True)
 
 if st.session_state.scene == "title":
-    st.markdown(
-        f'<div class="title-wrap"><img src="{img_src(TITLE_IMAGE, "image/jpeg")}" alt="A Little Gift From Sweetheart title screen"></div>',
-        unsafe_allow_html=True
-    )
-    st.markdown('<div class="title-start">', unsafe_allow_html=True)
-    if st.button("▶  Start", key="start_game", use_container_width=True):
-        start_game()
-        st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.container(key="title_screen"):
+        st.markdown(
+            f'<div class="title-wrap"><img src="{img_src(TITLE_IMAGE, "image/jpeg")}" alt="A Little Gift From Sweetheart title screen"></div>',
+            unsafe_allow_html=True
+        )
+        # Invisible Streamlit hit-area aligned exactly over the illustrated Start button.
+        if st.button("Start game", key="start_game"):
+            start_game()
+            st.rerun()
 
 else:
     toast = ""
