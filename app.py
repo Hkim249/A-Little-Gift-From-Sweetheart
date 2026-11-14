@@ -88,32 +88,62 @@ div[data-testid="stButton"] button:hover {
 }
 @keyframes fadeIn {from{opacity:0} to{opacity:1}}
 .wall {position:absolute; inset:0 0 31% 0; background:
-  repeating-linear-gradient(90deg,transparent 0 62px,rgba(119,76,76,.10) 62px 65px),
-  repeating-linear-gradient(0deg,transparent 0 62px,rgba(119,76,76,.08) 62px 65px),
-  #f1d0bf;}
+  repeating-linear-gradient(90deg,transparent 0 62px,rgba(119,76,76,.07) 62px 65px),
+  repeating-linear-gradient(0deg,transparent 0 62px,rgba(119,76,76,.06) 62px 65px),
+  linear-gradient(#f6d9ca,#efc6b8);}
 .floor {position:absolute; left:0;right:0;bottom:0;height:31%;background:
   repeating-linear-gradient(0deg,rgba(83,52,49,.22) 0 4px,transparent 4px 42px),
   repeating-linear-gradient(90deg,transparent 0 100px,rgba(83,52,49,.18) 100px 104px),
   #a96f61; border-top:8px solid #79534e;}
-.window {position:absolute;top:7%;left:6%;width:25%;height:34%;border:10px solid #79504c;background:#f4c3a9;box-shadow:inset 0 0 0 5px #f8dfc9;}
+.window {position:absolute;z-index:1;top:8%;left:5%;width:24%;height:33%;border:10px solid #79504c;background:
+  linear-gradient(180deg,#e8a9a0 0%,#f7d2a7 62%,#f6e0ba 100%);
+  box-shadow:inset 0 0 0 5px #f8dfc9,5px 6px 0 rgba(92,57,59,.22);}
 .window:before {content:"";position:absolute;left:50%;height:100%;border-left:6px solid #79504c}
 .window:after {content:"";position:absolute;top:50%;width:100%;border-top:6px solid #79504c}
-.curtain {position:absolute;top:5%;left:4%;width:29%;height:39%;border-left:18px solid #c77e87;border-right:18px solid #c77e87;pointer-events:none;}
-.poster {position:absolute;right:8%;top:7%;width:12%;height:20%;background:#f5e4bd;border:7px solid #795b4e;display:grid;place-items:center;font-size:2rem;border-radius:0;}
-.desk {position:absolute;right:8%;bottom:31%;width:34%;height:17%;background:#80513d;border:7px solid #5e3d34;border-radius:0;box-shadow:0 8px 0 #5e3d34;}
+.curtain {position:absolute;z-index:2;top:5%;left:3.5%;width:27%;height:39%;border-left:20px solid #c77e87;border-right:20px solid #c77e87;pointer-events:none;filter:drop-shadow(3px 3px 0 #9f646e);}
+.curtain:before,.curtain:after {content:"";position:absolute;top:0;width:16px;height:100%;background:repeating-linear-gradient(0deg,#e6a0a0 0 16px,#d88b93 16px 32px);}
+.curtain:before{left:-20px}.curtain:after{right:-20px}
+.sunlight {position:absolute;z-index:1;left:11%;top:34%;width:27%;height:28%;background:linear-gradient(135deg,rgba(255,227,166,.42),transparent 70%);clip-path:polygon(0 0,100% 0,72% 100%,0 100%);}
+.poster {position:absolute;z-index:2;right:10%;top:7%;width:13%;height:20%;background:#f5e4bd;border:7px solid #795b4e;display:grid;place-items:center;font:22px 'Press Start 2P';color:#8c6870;box-shadow:4px 5px 0 rgba(92,57,59,.22);}
+.poster:after {content:"STAY\\A CURIOUS";white-space:pre;text-align:center;font:8px 'Press Start 2P';line-height:2;color:#8c6870;}
+.wall-shelf {position:absolute;z-index:3;right:29%;top:19%;width:22%;height:12px;background:#95634b;border:4px solid #684638;box-shadow:0 6px 0 rgba(91,58,49,.18);}
+.wall-shelf:before {content:"";position:absolute;left:12%;bottom:100%;width:18%;height:34px;background:linear-gradient(90deg,#78917a 0 30%,#d9ad7d 30% 65%,#b77d83 65%);border:3px solid #75574e;}
+.wall-shelf:after {content:"";position:absolute;right:12%;bottom:100%;width:22%;height:26px;background:repeating-linear-gradient(90deg,#d9b58b 0 8px,#f0d6ac 8px 12px);border:3px solid #75574e;}
+.clock {position:absolute;z-index:3;left:38%;top:8%;width:58px;height:58px;background:#f8e8cb;border:6px solid #805b59;box-shadow:3px 4px 0 #b58a7e;}
+.clock:before {content:"";position:absolute;left:50%;top:15%;height:35%;border-left:3px solid #76545a;transform:rotate(35deg);transform-origin:bottom;}
+.clock:after {content:"";position:absolute;left:50%;top:48%;width:23%;border-top:3px solid #76545a;transform:rotate(-12deg);transform-origin:left;}
+.fairy-lights {position:absolute;z-index:2;left:31%;top:4%;width:39%;height:64px;border-top:4px dotted #9a6a65;transform:rotate(5deg);}
+.fairy-lights:before {content:"";position:absolute;left:8%;top:-2px;width:9px;height:14px;background:#ffe6a0;box-shadow:65px 9px #ffe6a0,132px 16px #ffe6a0,205px 18px #ffe6a0,275px 8px #ffe6a0;filter:drop-shadow(0 0 5px #f4ca8d);}
+.desk {position:absolute;z-index:4;right:6%;bottom:31%;width:31%;height:16%;background:#80513d;border:7px solid #5e3d34;border-radius:0;box-shadow:0 8px 0 #5e3d34;}
 .desk:before {content:"";position:absolute;left:8%;right:8%;top:100%;height:85px;background:linear-gradient(90deg,#704735 0 12%,transparent 12% 88%,#704735 88%);}
-.laptop {position:absolute;left:38%;top:-53%;width:27%;height:54%;background:#55545d;border:6px solid #34333d;border-radius:0;}
+.desk:after {content:"";position:absolute;left:0;right:0;top:13%;height:8px;background:#b17a58;}
+.laptop {position:absolute;left:36%;top:-58%;width:29%;height:59%;background:#55545d;border:6px solid #34333d;border-radius:0;box-shadow:3px 3px 0 #483d43;}
 .laptop:after {content:"";position:absolute;left:-15%;right:-15%;bottom:-8px;height:8px;background:#aaa09a;}
-.screen-glow {position:absolute;inset:8%;background:#9bc5bd;}
-.chair {position:absolute;right:28%;bottom:16%;width:10%;height:12%;background:#76504a;border:6px solid #513b39;border-radius:0;}
+.screen-glow {position:absolute;inset:8%;background:linear-gradient(135deg,#a9d4c7,#d8e8c5 60%,#f1d6a7);}
+.mug {position:absolute;z-index:6;right:14%;bottom:calc(31% + 15%);width:27px;height:27px;background:#e8b6ad;border:4px solid #704d4b;box-shadow:8px 4px 0 -3px #704d4b;}
+.books {position:absolute;z-index:6;right:25%;bottom:calc(31% + 16%);width:54px;height:19px;background:linear-gradient(0deg,#d7a36e 0 33%,#8d9e8a 33% 66%,#c77e87 66%);border:3px solid #684638;}
+.chair {position:absolute;z-index:3;right:26%;bottom:15%;width:9%;height:12%;background:#76504a;border:6px solid #513b39;border-radius:0;box-shadow:4px 5px 0 rgba(70,45,44,.2);}
 .chair:after {content:"";position:absolute;left:12%;right:12%;top:100%;height:38px;border-left:6px solid #513b39;border-right:6px solid #513b39;}
-.mattress {position:absolute;left:7%;bottom:9%;width:37%;height:17%;background:#eee0d5;border:7px solid #91645d;border-radius:0;box-shadow:inset 0 -13px #d8bcb1;}
-.pillow {position:absolute;left:11%;bottom:21%;width:13%;height:7%;background:#fff2e6;border:5px solid #cba99f;border-radius:0;}
-.wardrobe {position:absolute;left:43%;top:12%;width:17%;height:48%;background:#a86f55;border:7px solid #754d42;box-shadow:inset 0 0 0 4px #c38d6e;border-radius:0;}
+.mattress {position:absolute;z-index:3;left:5%;bottom:8%;width:29%;height:16%;background:#eee0d5;border:7px solid #91645d;border-radius:0;box-shadow:inset 0 -13px #d8bcb1,5px 6px 0 rgba(75,49,47,.2);}
+.mattress:before {content:"";position:absolute;left:0;right:0;top:20%;height:5px;background:#d2b2aa;}
+.pillow {position:absolute;z-index:4;left:9%;bottom:20%;width:12%;height:7%;background:#fff2e6;border:5px solid #cba99f;border-radius:0;box-shadow:3px 3px 0 #c49b94;}
+.blanket {position:absolute;z-index:4;left:21%;bottom:8%;width:12%;height:13%;background:repeating-linear-gradient(90deg,#b77e8a 0 12px,#d69ba1 12px 24px);border:5px solid #91645d;}
+.wardrobe {position:absolute;z-index:3;left:68%;top:13%;width:14%;height:48%;background:#a86f55;border:7px solid #754d42;box-shadow:inset 0 0 0 4px #c38d6e,5px 6px 0 rgba(75,49,47,.2);border-radius:0;}
 .wardrobe:before {content:"";position:absolute;left:50%;height:100%;border-left:4px solid #754d42}
-.wardrobe:after {content:"";position:absolute;left:45%;top:45%;height:9px;width:9px;background:#f0d59c;box-shadow:22px 0 #f0d59c;}
-.room-label {position:absolute;left:2%;top:2%;background:#fff0dd;border:3px solid #805a61;padding:7px 10px;border-radius:0;font:12px 'Press Start 2P',monospace;}
-.hero {position:absolute;left:44%;bottom:23%;height:45%;width:auto;max-width:23%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(4px 5px 0 #75504b);}
+.wardrobe:after {content:"";position:absolute;left:38%;top:45%;height:9px;width:9px;background:#f0d59c;box-shadow:27px 0 #f0d59c;}
+.wardrobe-tag {position:absolute;z-index:4;left:70%;top:17%;font:7px 'Press Start 2P';color:#f1d9b8;writing-mode:vertical-rl;letter-spacing:2px;}
+.rug {position:absolute;z-index:2;left:34%;bottom:4%;width:34%;height:12%;background:repeating-linear-gradient(90deg,#c78c91 0 18px,#e4b4a7 18px 36px);border:7px solid #80575a;box-shadow:0 5px 0 rgba(75,49,47,.2);}
+.rug:after {content:"";position:absolute;inset:10px;border:3px dashed #f2d8c5;}
+.plant {position:absolute;z-index:4;left:36%;bottom:25%;width:42px;height:58px;}
+.plant:before {content:"";position:absolute;bottom:0;left:7px;width:30px;height:24px;background:#c98b76;border:4px solid #79534e;}
+.plant:after {content:"";position:absolute;left:15px;top:0;width:12px;height:40px;background:#789477;box-shadow:-12px 12px 0 -2px #91aa87,12px 9px 0 -2px #63846f,-5px 0 0 -2px #63846f;}
+.laundry {position:absolute;z-index:4;right:4%;bottom:8%;width:55px;height:54px;background:repeating-linear-gradient(90deg,#8a9a91 0 9px,#aeb9a7 9px 18px);border:5px solid #5d7068;}
+.laundry:before {content:"";position:absolute;left:-6px;top:-14px;width:58px;height:13px;background:#d9c6ae;border:4px solid #795b4e;}
+.shoes {position:absolute;z-index:4;right:15%;bottom:7%;width:45px;height:17px;background:#e8dfd1;border:4px solid #59464a;box-shadow:28px 4px 0 -1px #d4a1a0;}
+.bag {position:absolute;z-index:4;left:40%;bottom:9%;width:38px;height:43px;background:#6e8290;border:5px solid #4c5967;}
+.bag:before {content:"";position:absolute;left:7px;top:-13px;width:14px;height:12px;border:4px solid #4c5967;border-bottom:0;}
+.room-label {position:absolute;z-index:9;left:2%;top:2%;background:#fff0dd;border:3px solid #805a61;padding:7px 10px;border-radius:0;font:10px 'Press Start 2P',monospace;box-shadow:3px 3px 0 #b88d87;}
+.hero {position:absolute;z-index:7;left:45%;bottom:19%;height:46%;width:auto;max-width:22%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(4px 5px 0 #75504b);}
 .phone-toast {position:absolute;right:3%;top:4%;width:min(330px,42%);background:#fff3e8;border:4px solid #76536a;border-radius:0;padding:13px 16px;box-shadow:5px 6px 0 #a8798c;animation:popIn .45s ease 1.2s both;opacity:0;}
 @keyframes popIn {0%{opacity:0;transform:translateY(-20px)}100%{opacity:1;transform:translateY(0)}}
 .toast-head {font:12px 'Press Start 2P',monospace;color:#98647a;border-bottom:2px solid #e5c9cf;padding-bottom:8px;margin-bottom:9px;line-height:1.7;}
@@ -163,13 +193,17 @@ else:
     st.markdown(f"""
     <div class="scene">
       <div class="wall"></div><div class="floor"></div>
-      <div class="window"></div><div class="curtain"></div>
-      <div class="poster">🌿</div>
-      <div class="wardrobe"></div>
+      <div class="window"></div><div class="curtain"></div><div class="sunlight"></div>
+      <div class="fairy-lights"></div><div class="clock"></div>
+      <div class="poster">✦</div><div class="wall-shelf"></div>
+      <div class="wardrobe"></div><div class="wardrobe-tag">DANG KHOA</div>
       <div class="desk"><div class="laptop"><div class="screen-glow"></div></div></div>
+      <div class="mug"></div><div class="books"></div>
       <div class="chair"></div>
-      <div class="mattress"></div><div class="pillow"></div>
-      <div class="room-label">Phòng của Đăng Khoa</div>
+      <div class="mattress"></div><div class="pillow"></div><div class="blanket"></div>
+      <div class="rug"></div><div class="plant"></div>
+      <div class="bag"></div><div class="laundry"></div><div class="shoes"></div>
+      <div class="room-label">PHÒNG CỦA ĐĂNG KHOA</div>
       <img class="hero" src="{img_src(MALE_SPRITE)}" alt="Đăng Khoa">
       {toast}
     </div>
