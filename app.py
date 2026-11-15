@@ -26,6 +26,8 @@ def start_game():
     st.session_state.chat_open = False
     st.session_state.reply = None
     st.session_state.completed_tasks = set()
+    st.session_state.active_task = None
+    st.session_state.shaved_hairs = set()
 
 if "scene" not in st.session_state:
     st.session_state.scene = "title"
@@ -35,6 +37,10 @@ if "reply" not in st.session_state:
     st.session_state.reply = None
 if "completed_tasks" not in st.session_state:
     st.session_state.completed_tasks = set()
+if "active_task" not in st.session_state:
+    st.session_state.active_task = None
+if "shaved_hairs" not in st.session_state:
+    st.session_state.shaved_hairs = set()
 
 st.markdown("""
 <style>
@@ -144,6 +150,16 @@ div[data-testid="stButton"] button:hover{
 
 .task-instruction{color:#f7d8e4;text-align:center;margin:14px auto 10px;font:700 13px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8}
 .task-status{color:#f9e5ed;text-align:center;margin:8px auto 12px;font:600 12px 'Be Vietnam Pro',Arial,sans-serif}
+.shave-page{min-height:100vh;padding:20px 3vw 34px;background:linear-gradient(180deg,#241d35,#49334b);animation:fadeIn .8s ease both}
+.shave-card{max-width:850px;margin:0 auto;padding:22px;background:#fff3e9;border:5px solid #76536a;box-shadow:7px 7px #241d35;text-align:center}
+.shave-face{position:relative;width:min(470px,78vw);height:330px;margin:12px auto 18px;border:4px solid #8a5e68;border-radius:48% 48% 42% 42%;background:linear-gradient(145deg,#f6c6a9,#e9a98f);box-shadow:inset -12px -10px #d99283,5px 6px #c58a91;overflow:hidden}
+.shave-nose{position:absolute;left:48%;top:43%;width:22px;height:28px;border-right:4px solid #a76c68;border-bottom:4px solid #a76c68;transform:rotate(25deg);border-radius:0 0 12px 0}
+.shave-mouth{position:absolute;left:38%;top:57%;width:25%;height:22px;border-bottom:7px solid #783e4a;border-radius:0 0 50% 50%}
+.shave-hair{position:absolute;width:7px;height:35px;background:#3c3035;border-radius:5px;transform-origin:bottom;box-shadow:1px 1px #241d35;transition:transform .55s ease,opacity .55s ease}
+.shave-hair.fallen{transform:translate(35px,95px) rotate(85deg);opacity:0}
+.shave-hair.h1{left:27%;top:69%;transform:rotate(-25deg)}.shave-hair.h2{left:34%;top:75%;transform:rotate(12deg)}.shave-hair.h3{left:42%;top:70%;transform:rotate(-12deg)}.shave-hair.h4{left:49%;top:77%;transform:rotate(18deg)}.shave-hair.h5{left:57%;top:70%;transform:rotate(-18deg)}.shave-hair.h6{left:65%;top:75%;transform:rotate(20deg)}.shave-hair.h7{left:72%;top:68%;transform:rotate(30deg)}
+.shave-tip{color:#745064;font-weight:700;line-height:1.8;margin:8px auto 14px}
+@media(max-width:700px){.shave-face{height:260px}.shave-card{padding:12px}}
 div[data-testid="stButton"] button:disabled{background:#aaa4aa!important;color:#5f5961!important;border:3px solid #77717a!important;box-shadow:4px 4px 0 #514b55!important;opacity:.78!important;cursor:not-allowed!important;transform:none!important}
 @media(max-width:700px){
     .room-page{padding:8px 1vw 18px}
@@ -237,7 +253,41 @@ elif st.session_state.scene == "room":
                 st.session_state.scene = "bathroom"
                 st.rerun()
 else:
-    if st.session_state.scene == "bathroom":
+    if st.session_state.scene == "bathroom" and st.session_state.active_task == "shave":
+        shaved = st.session_state.shaved_hairs
+        hair_html = "".join(
+            f'<span class="shave-hair h{i+1} {"fallen" if i in shaved else ""}"></span>'
+            for i in range(7)
+        )
+        st.markdown(f"""
+        <div class="shave-page">
+          <div class="shave-card">
+            <div style="font-size:22px;font-weight:800;color:#69475c">MINI GAME · CẠO RÂU</div>
+            <div class="shave-tip">Di chuyển dao cạo đến từng cọng râu và cạo sạch phần dưới cằm nhé!</div>
+            <div class="shave-face">
+              <div class="shave-nose"></div><div class="shave-mouth"></div>{hair_html}
+            </div>
+            <div class="shave-tip">ĐÃ CẠO: {len(shaved)}/7 CỌNG RÂU</div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.markdown('<div class="task-instruction">CHỌN TỪNG CỌNG RÂU ĐỂ ĐƯA DAO CẠO TỚI</div>', unsafe_allow_html=True)
+        cols = st.columns(4)
+        for i in range(7):
+            with cols[i % 4]:
+                if i in shaved:
+                    st.button(f"✓ Cọng {i+1}", key=f"hair_{i}", disabled=True, use_container_width=True)
+                elif st.button(f"🪒 Cạo cọng {i+1}", key=f"hair_{i}", use_container_width=True):
+                    st.session_state.shaved_hairs.add(i)
+                    if len(st.session_state.shaved_hairs) == 7:
+                        st.session_state.completed_tasks.add("shave")
+                        st.session_state.active_task = None
+                    st.rerun()
+        if len(shaved) == 7:
+            st.session_state.completed_tasks.add("shave")
+            st.session_state.active_task = None
+            st.rerun()
+    elif st.session_state.scene == "bathroom":
         st.markdown(f"""
         <div class="bathroom-page">
           <div class="bathroom-frame">
@@ -255,7 +305,11 @@ else:
             done = task_id in completed
             button_label = f"✓  {label.replace('🪒  ', '').replace('💧  ', '').replace('👕  ', '')} — ĐÃ XONG" if done else label
             if st.button(button_label, key=f"task_{task_id}", use_container_width=True, disabled=done):
-                st.session_state.completed_tasks.add(task_id)
+                if task_id == "shave":
+                    st.session_state.active_task = "shave"
+                    st.session_state.shaved_hairs = set()
+                else:
+                    st.session_state.completed_tasks.add(task_id)
                 st.rerun()
 
         if len(completed) == 3:
