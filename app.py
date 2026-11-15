@@ -2,6 +2,7 @@ from pathlib import Path
 import base64
 import html
 import streamlit as st
+import streamlit.components.v1 as components
 
 # A Little Gift From Sweetheart
 # Self-contained build: compressed WebP assets are embedded in this file.
@@ -13,6 +14,8 @@ DANG_KHOA = "UklGRrArBABXRUJQVlA4TKQrBAAvAQIaEU1QkCRJcNvEFLBsnGvm/w/exQmAPxDR/wm
 
 def image_uri(data):
     return f"data:image/webp;base64,{data}"
+
+shave_drag_game = components.declare_component("shave_drag_game", path=str(Path(__file__).parent / "shave_component"))
 
 st.set_page_config(
     page_title="A Little Gift From Sweetheart",
@@ -254,38 +257,13 @@ elif st.session_state.scene == "room":
                 st.rerun()
 else:
     if st.session_state.scene == "bathroom" and st.session_state.active_task == "shave":
-        shaved = st.session_state.shaved_hairs
-        hair_html = "".join(
-            f'<span class="shave-hair h{i+1} {"fallen" if i in shaved else ""}"></span>'
-            for i in range(7)
-        )
-        st.markdown(f"""
-        <div class="shave-page">
-          <div class="shave-card">
-            <div style="font-size:22px;font-weight:800;color:#69475c">MINI GAME · CẠO RÂU</div>
-            <div class="shave-tip">Di chuyển dao cạo đến từng cọng râu và cạo sạch phần dưới cằm nhé!</div>
-            <div class="shave-face">
-              <div class="shave-nose"></div><div class="shave-mouth"></div>{hair_html}
-            </div>
-            <div class="shave-tip">ĐÃ CẠO: {len(shaved)}/7 CỌNG RÂU</div>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-        st.markdown('<div class="task-instruction">CHỌN TỪNG CỌNG RÂU ĐỂ ĐƯA DAO CẠO TỚI</div>', unsafe_allow_html=True)
-        cols = st.columns(4)
-        for i in range(7):
-            with cols[i % 4]:
-                if i in shaved:
-                    st.button(f"✓ Cọng {i+1}", key=f"hair_{i}", disabled=True, use_container_width=True)
-                elif st.button(f"🪒 Cạo cọng {i+1}", key=f"hair_{i}", use_container_width=True):
-                    st.session_state.shaved_hairs.add(i)
-                    if len(st.session_state.shaved_hairs) == 7:
-                        st.session_state.completed_tasks.add("shave")
-                        st.session_state.active_task = None
-                    st.rerun()
-        if len(shaved) == 7:
+        st.markdown('<div class="shave-page">', unsafe_allow_html=True)
+        result = shave_drag_game(key="shave_drag_surface", default=None)
+        st.markdown('</div>', unsafe_allow_html=True)
+        if result == "done":
             st.session_state.completed_tasks.add("shave")
             st.session_state.active_task = None
+            st.session_state.shaved_hairs = set(range(7))
             st.rerun()
     elif st.session_state.scene == "bathroom":
         st.markdown(f"""
