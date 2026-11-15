@@ -25,6 +25,7 @@ def start_game():
     st.session_state.scene = "room"
     st.session_state.chat_open = False
     st.session_state.reply = None
+    st.session_state.completed_tasks = set()
 
 if "scene" not in st.session_state:
     st.session_state.scene = "title"
@@ -32,11 +33,13 @@ if "chat_open" not in st.session_state:
     st.session_state.chat_open = False
 if "reply" not in st.session_state:
     st.session_state.reply = None
+if "completed_tasks" not in st.session_state:
+    st.session_state.completed_tasks = set()
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
-*{box-sizing:border-box}
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;font-family:'Be Vietnam Pro',Arial,sans-serif!important}
 html,body,.stApp,[data-testid="stAppViewContainer"]{
     margin:0!important;padding:0!important;background:#171321!important
 }
@@ -48,7 +51,7 @@ html,body,.stApp,[data-testid="stAppViewContainer"]{
 div[data-testid="stCode"],.stCode,pre{display:none!important}
 div[data-testid="stButton"] button{
     border:3px solid #70465e;border-radius:0;background:#f4c0d0;color:#58384d;
-    font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:700;
+    font-family:'Be Vietnam Pro',Arial,sans-serif;font-size:13px;font-weight:700;
     box-shadow:4px 4px 0 #9e7189;padding:.75rem 1rem
 }
 div[data-testid="stButton"] button:hover{
@@ -92,7 +95,7 @@ div[data-testid="stButton"] button:hover{
 .room-title{
     position:absolute;z-index:4;left:1.5%;top:2%;padding:9px 11px;
     color:#604454;background:#fff0df;border:3px solid #805a61;
-    box-shadow:3px 3px #b88d87;font:700 12px 'Segoe UI',Arial,sans-serif;line-height:1.8
+    box-shadow:3px 3px #b88d87;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8
 }
 .khoa-sprite{
     position:absolute;z-index:5;left:48%;bottom:3%;height:66%;max-width:19%;
@@ -105,22 +108,22 @@ div[data-testid="stButton"] button:hover{
     box-shadow:5px 5px #b88799;animation:popIn .5s ease 1s both;opacity:0
 }
 @keyframes popIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
-.notification-head{font:700 11px 'Segoe UI',Arial,sans-serif;line-height:1.8;color:#98647a;border-bottom:2px solid #e5cbd0;padding-bottom:7px}
-.notification-message{font:18px 'Segoe UI',Arial,sans-serif;line-height:1.15;color:#493447;padding-top:7px}
-.hint{color:#f7d8e4;text-align:center;margin:14px auto 8px;font:700 12px 'Segoe UI',Arial,sans-serif;line-height:1.8}
+.notification-head{font:700 11px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8;color:#98647a;border-bottom:2px solid #e5cbd0;padding-bottom:7px}
+.notification-message{font:18px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.15;color:#493447;padding-top:7px}
+.hint{color:#f7d8e4;text-align:center;margin:14px auto 8px;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8}
 .chat-panel{
     width:min(720px,94vw);margin:18px auto 30px;padding:17px;
     background:#fff5ec;border:5px solid #76536a;box-shadow:6px 6px #9c7186
 }
-.chat-header{color:#89576e;font:700 14px 'Segoe UI',Arial,sans-serif;border-bottom:3px solid #eed9df;padding-bottom:12px;line-height:1.8}
+.chat-header{color:#89576e;font:700 14px 'Be Vietnam Pro',Arial,sans-serif;border-bottom:3px solid #eed9df;padding-bottom:12px;line-height:1.8}
 .chat-message{display:flex;align-items:center;gap:13px;margin:15px 0}
 .chat-avatar{width:76px;height:92px;object-fit:contain;image-rendering:pixelated;flex:0 0 auto}
-.chat-bubble{max-width:80%;padding:10px 14px;color:#573c4b;background:#f8dce7;border:3px solid #d99bb1;font:17px 'Segoe UI',Arial,sans-serif;line-height:1.2}
+.chat-bubble{max-width:80%;padding:10px 14px;color:#573c4b;background:#f8dce7;border:3px solid #d99bb1;font:17px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.2}
 .chat-bubble.player{margin-left:auto;background:#e6edf8;border-color:#aabbd8}
 .chat-message.player-row{justify-content:flex-end}
 .chat-message.player-row .chat-bubble{margin-left:0}
-.chat-panel,.chat-panel *{font-family:'Segoe UI',Arial,sans-serif!important;overflow-wrap:anywhere}
-.chat-caption{text-align:center;color:#896a78;font:700 12px 'Segoe UI',Arial,sans-serif;line-height:1.9;margin:10px 0}
+.chat-panel,.chat-panel *{font-family:'Be Vietnam Pro',Arial,sans-serif!important;overflow-wrap:anywhere}
+.chat-caption{text-align:center;color:#896a78;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.9;margin:10px 0}
 /* Bathroom scene: same pixel-art framing and soft fade transition */
 .bathroom-page{
     min-height:100vh;width:100%;padding:18px 2vw 28px;
@@ -135,9 +138,13 @@ div[data-testid="stButton"] button:hover{
 .bathroom-title{
     position:absolute;z-index:4;left:1.5%;top:2%;padding:9px 11px;
     color:#604454;background:#fff0df;border:3px solid #805a61;
-    box-shadow:3px 3px #b88d87;font:700 12px 'Segoe UI',Arial,sans-serif;line-height:1.8
+    box-shadow:3px 3px #b88d87;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8
 }
-.prepare-hint{color:#f7d8e4;text-align:center;margin:14px auto 8px;font:700 12px 'Segoe UI',Arial,sans-serif;line-height:1.8}
+.prepare-hint{color:#f7d8e4;text-align:center;margin:14px auto 8px;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8}
+
+.task-instruction{color:#f7d8e4;text-align:center;margin:14px auto 10px;font:700 13px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8}
+.task-status{color:#f9e5ed;text-align:center;margin:8px auto 12px;font:600 12px 'Be Vietnam Pro',Arial,sans-serif}
+div[data-testid="stButton"] button:disabled{background:#aaa4aa!important;color:#5f5961!important;border:3px solid #77717a!important;box-shadow:4px 4px 0 #514b55!important;opacity:.78!important;cursor:not-allowed!important;transform:none!important}
 @media(max-width:700px){
     .room-page{padding:8px 1vw 18px}
     .room-frame{min-height:420px;aspect-ratio:4/3}
@@ -230,12 +237,40 @@ elif st.session_state.scene == "room":
                 st.session_state.scene = "bathroom"
                 st.rerun()
 else:
-    st.markdown(f"""
-    <div class="bathroom-page">
-      <div class="bathroom-frame">
-        <img class="bathroom-background" src="{image_uri(BATHROOM_BG)}" alt="Nhà tắm pixel art">
-        <div class="bathroom-title">NHÀ TẮM CỦA ĐĂNG KHOA</div>
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
-    st.markdown('<div class="prepare-hint">ĐĂNG KHOA ĐANG CHUẨN BỊ...</div>', unsafe_allow_html=True)
+    if st.session_state.scene == "bathroom":
+        st.markdown(f"""
+        <div class="bathroom-page">
+          <div class="bathroom-frame">
+            <img class="bathroom-background" src="{image_uri(BATHROOM_BG)}" alt="Nhà tắm pixel art">
+            <div class="bathroom-title">NHÀ TẮM CỦA ĐĂNG KHOA</div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.markdown('<div class="task-instruction">ĐĂNG KHOA CẦN HOÀN THÀNH CẢ 3 VIỆC TRƯỚC KHI RA NGOÀI</div>', unsafe_allow_html=True)
+
+        tasks = [("shave", "🪒  CẠO RÂU"), ("wash", "💧  RỬA MẶT"), ("change", "👕  THAY ĐỒ")]
+        completed = st.session_state.completed_tasks
+        st.markdown(f'<div class="task-status">ĐÃ HOÀN THÀNH: {len(completed)}/3</div>', unsafe_allow_html=True)
+        for task_id, label in tasks:
+            done = task_id in completed
+            button_label = f"✓  {label.replace('🪒  ', '').replace('💧  ', '').replace('👕  ', '')} — ĐÃ XONG" if done else label
+            if st.button(button_label, key=f"task_{task_id}", use_container_width=True, disabled=done):
+                st.session_state.completed_tasks.add(task_id)
+                st.rerun()
+
+        if len(completed) == 3:
+            st.markdown('<div class="task-instruction">ĐÃ CHUẨN BỊ XONG! ĐĂNG KHOA SẴN SÀNG RỒI ♡</div>', unsafe_allow_html=True)
+            if st.button("TIẾP TỤC  →", key="bathroom_continue", use_container_width=True):
+                st.session_state.scene = "next"
+                st.rerun()
+    else:
+        st.markdown("""
+        <div class="bathroom-page">
+          <div class="bathroom-frame" style="display:flex;align-items:center;justify-content:center;background:#d9aebc">
+            <div style="text-align:center;color:#573c4b;padding:24px">
+              <div style="font-size:28px;font-weight:800">ĐĂNG KHOA ĐÃ CHUẨN BỊ XONG!</div>
+              <div style="font-size:18px;margin-top:14px">Sẵn sàng cho cuộc hẹn rồi ♡</div>
+            </div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
