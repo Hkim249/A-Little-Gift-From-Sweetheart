@@ -28,6 +28,15 @@ shave_drag_game = components.declare_component(
     path=str(SHAVE_COMPONENT_DIR),
 )
 
+WASH_COMPONENT_DIR = Path(__file__).resolve().parent / "wash_component"
+if not (WASH_COMPONENT_DIR / "index.html").is_file():
+    st.error("Thiếu thư mục wash_component/index.html. Hãy tải thư mục wash_component lên GitHub, đặt cùng cấp với app.py.")
+    st.stop()
+wash_face_game = components.declare_component(
+    "wash_face_game",
+    path=str(WASH_COMPONENT_DIR),
+)
+
 st.set_page_config(
     page_title="A Little Gift From Sweetheart",
     page_icon="🌸",
@@ -267,7 +276,22 @@ elif st.session_state.scene == "room":
                 st.session_state.scene = "bathroom"
                 st.rerun()
 else:
-    if st.session_state.scene == "bathroom" and st.session_state.active_task == "shave":
+    if st.session_state.scene == "bathroom" and st.session_state.active_task == "wash":
+        st.markdown("""
+        <style>
+          html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-testid="stMainBlockContainer"] {background:transparent!important}
+          [data-testid="stMainBlockContainer"] {padding:0!important;margin:0!important;max-width:100%!important}
+          [data-testid="stVerticalBlock"] {gap:0!important}
+          [data-testid="stElementContainer"] {margin:0!important}
+          iframe[title="wash_face_game"] {display:block!important;width:100%!important;border:0!important;margin:0!important}
+        </style>
+        """, unsafe_allow_html=True)
+        result = wash_face_game(key="wash_face_surface", default=None)
+        if result == "done":
+            st.session_state.completed_tasks.add("wash")
+            st.session_state.active_task = None
+            st.rerun()
+    elif st.session_state.scene == "bathroom" and st.session_state.active_task == "shave":
         # Full-viewport mini-game: remove Streamlit's default page spacing/background
         # so no purple strip appears before the embedded shaving component.
         st.markdown("""
@@ -315,9 +339,10 @@ else:
             done = task_id in completed
             button_label = f"✓  {label.replace('🪒  ', '').replace('💧  ', '').replace('👕  ', '')} — ĐÃ XONG" if done else label
             if st.button(button_label, key=f"task_{task_id}", use_container_width=True, disabled=done):
-                if task_id == "shave":
-                    st.session_state.active_task = "shave"
-                    st.session_state.shaved_hairs = set()
+                if task_id in ("shave", "wash"):
+                    st.session_state.active_task = task_id
+                    if task_id == "shave":
+                        st.session_state.shaved_hairs = set()
                 else:
                     st.session_state.completed_tasks.add(task_id)
                 st.rerun()
