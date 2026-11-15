@@ -15,7 +15,18 @@ DANG_KHOA = "UklGRrArBABXRUJQVlA4TKQrBAAvAQIaEU1QkCRJcNvEFLBsnGvm/w/exQmAPxDR/wm
 def image_uri(data):
     return f"data:image/webp;base64,{data}"
 
-shave_drag_game = components.declare_component("shave_drag_game", path=str(Path(__file__).parent / "shave_component"))
+# The custom drag-and-shave component must be deployed beside app.py.
+SHAVE_COMPONENT_DIR = Path(__file__).resolve().parent / "shave_component"
+if not (SHAVE_COMPONENT_DIR / "index.html").is_file():
+    st.error(
+        "Thiếu thư mục shave_component/index.html. "
+        "Hãy tải toàn bộ thư mục shave_component lên GitHub, đặt cùng cấp với app.py."
+    )
+    st.stop()
+shave_drag_game = components.declare_component(
+    "shave_drag_game",
+    path=str(SHAVE_COMPONENT_DIR),
+)
 
 st.set_page_config(
     page_title="A Little Gift From Sweetheart",
