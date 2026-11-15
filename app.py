@@ -268,9 +268,30 @@ elif st.session_state.scene == "room":
                 st.rerun()
 else:
     if st.session_state.scene == "bathroom" and st.session_state.active_task == "shave":
-        st.markdown('<div class="shave-page">', unsafe_allow_html=True)
+        # Full-viewport mini-game: remove Streamlit's default page spacing/background
+        # so no purple strip appears before the embedded shaving component.
+        st.markdown("""
+        <style>
+          html, body, .stApp, [data-testid="stAppViewContainer"],
+          [data-testid="stMain"], [data-testid="stMainBlockContainer"] {
+            background: transparent !important;
+          }
+          [data-testid="stMainBlockContainer"] {
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+          }
+          [data-testid="stVerticalBlock"] { gap: 0 !important; }
+          [data-testid="stElementContainer"] { margin: 0 !important; }
+          iframe[title="shave_drag_game"] {
+            display: block !important;
+            width: 100% !important;
+            border: 0 !important;
+            margin: 0 !important;
+          }
+        </style>
+        """, unsafe_allow_html=True)
         result = shave_drag_game(key="shave_drag_surface", default=None)
-        st.markdown('</div>', unsafe_allow_html=True)
         if result == "done":
             st.session_state.completed_tasks.add("shave")
             st.session_state.active_task = None
