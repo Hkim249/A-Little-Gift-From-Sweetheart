@@ -49,6 +49,7 @@ wash_face_game = components.declare_component(
     path=str(WASH_COMPONENT_DIR),
 )
 
+
 st.set_page_config(
     page_title="A Little Gift From Sweetheart",
     page_icon="🌸",
@@ -72,6 +73,8 @@ if "reply" not in st.session_state:
     st.session_state.reply = None
 if "completed_tasks" not in st.session_state:
     st.session_state.completed_tasks = set()
+else:
+    st.session_state.completed_tasks = set(st.session_state.completed_tasks) & {"shave", "wash"}
 if "active_task" not in st.session_state:
     st.session_state.active_task = None
 if "shaved_hairs" not in st.session_state:
@@ -342,36 +345,32 @@ else:
           </div>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('<div class="task-instruction">ĐĂNG KHOA CẦN HOÀN THÀNH CẢ 3 VIỆC TRƯỚC KHI RA NGOÀI</div>', unsafe_allow_html=True)
+        st.markdown('<div class="task-instruction">ĐĂNG KHOA CẦN HOÀN THÀNH 2 VIỆC TRƯỚC KHI RA NGOÀI</div>', unsafe_allow_html=True)
 
-        tasks = [("shave", "🪒  CẠO RÂU"), ("wash", "💧  RỬA MẶT"), ("change", "👕  THAY ĐỒ")]
+        tasks = [("shave", "🪒  CẠO RÂU"), ("wash", "💧  RỬA MẶT")]
         completed = st.session_state.completed_tasks
-        st.markdown(f'<div class="task-status">ĐÃ HOÀN THÀNH: {len(completed)}/3</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="task-status">ĐÃ HOÀN THÀNH: {len(completed)}/2</div>', unsafe_allow_html=True)
         for task_id, label in tasks:
             done = task_id in completed
             button_label = f"✓  {label.replace('🪒  ', '').replace('💧  ', '').replace('👕  ', '')} — ĐÃ XONG" if done else label
             if st.button(button_label, key=f"task_{task_id}", use_container_width=True, disabled=done):
-                if task_id in ("shave", "wash"):
-                    st.session_state.active_task = task_id
-                    if task_id == "shave":
-                        st.session_state.shaved_hairs = set()
-                else:
-                    st.session_state.completed_tasks.add(task_id)
+                st.session_state.active_task = task_id
+                if task_id == "shave":
+                    st.session_state.shaved_hairs = set()
                 st.rerun()
 
-        if len(completed) == 3:
+        if len(completed) == 2:
             st.markdown('<div class="task-instruction">ĐÃ CHUẨN BỊ XONG! ĐĂNG KHOA SẴN SÀNG RỒI ♡</div>', unsafe_allow_html=True)
             if st.button("TIẾP TỤC  →", key="bathroom_continue", use_container_width=True):
                 st.session_state.scene = "next"
                 st.rerun()
     else:
-        st.markdown("""
-        <div class="bathroom-page">
-          <div class="bathroom-frame" style="display:flex;align-items:center;justify-content:center;background:#d9aebc">
-            <div style="text-align:center;color:#573c4b;padding:24px">
-              <div style="font-size:28px;font-weight:800">ĐĂNG KHOA ĐÃ CHUẨN BỊ XONG!</div>
-              <div style="font-size:18px;margin-top:14px">Sẵn sàng cho cuộc hẹn rồi ♡</div>
-            </div>
+        st.markdown(f"""
+        <div style="min-height:100vh;padding:28px 16px;background:linear-gradient(135deg,#d9b1d8,#e9c1dc 45%,#c8b1db);display:flex;align-items:center;justify-content:center">
+          <div style="max-width:900px;width:100%;padding:26px;background:#fff0f3;border:5px solid #a9779b;box-shadow:0 8px #79567f;text-align:center;color:#68465f">
+            <div style="font-size:clamp(22px,4vw,30px);font-weight:900">ĐĂNG KHOA ĐÃ CHUẨN BỊ XONG! ♡</div>
+            <img src="{image_uri(DANG_KHOA)}" alt="Đăng Khoa" style="display:block;height:min(48vh,390px);max-width:70%;object-fit:contain;margin:16px auto;image-rendering:pixelated">
+            <div style="font-size:17px;line-height:1.9">Đã cạo râu và rửa mặt xong.<br>Đăng Khoa sẵn sàng đến gặp Mẹ Meo rồi! ♡</div>
           </div>
         </div>
         """, unsafe_allow_html=True)
