@@ -49,6 +49,16 @@ wash_face_game = components.declare_component(
     path=str(WASH_COMPONENT_DIR),
 )
 
+# Air Blade mini-game component, shown after the preparation/wash sequence.
+GAME_COMPONENT_DIR = Path(__file__).resolve().parent / "ride_game_component"
+if not (GAME_COMPONENT_DIR / "index.html").is_file():
+    st.error("Thiếu thư mục ride_game_component. Hãy giữ thư mục này cùng cấp với app.py.")
+    st.stop()
+ride_game = components.declare_component(
+    "ride_game",
+    path=str(GAME_COMPONENT_DIR),
+)
+
 
 st.set_page_config(
     page_title="A Little Gift From Sweetheart",
@@ -362,15 +372,24 @@ else:
         if len(completed) == 2:
             st.markdown('<div class="task-instruction">ĐÃ CHUẨN BỊ XONG! ĐĂNG KHOA SẴN SÀNG RỒI ♡</div>', unsafe_allow_html=True)
             if st.button("TIẾP TỤC  →", key="bathroom_continue", use_container_width=True):
-                st.session_state.scene = "next"
+                st.session_state.scene = "game"
                 st.rerun()
-    else:
-        st.markdown(f"""
-        <div style="min-height:100vh;padding:28px 16px;background:linear-gradient(135deg,#d9b1d8,#e9c1dc 45%,#c8b1db);display:flex;align-items:center;justify-content:center">
-          <div style="max-width:900px;width:100%;padding:26px;background:#fff0f3;border:5px solid #a9779b;box-shadow:0 8px #79567f;text-align:center;color:#68465f">
-            <div style="font-size:clamp(22px,4vw,30px);font-weight:900">ĐĂNG KHOA ĐÃ CHUẨN BỊ XONG! ♡</div>
-            <img src="{image_uri(DANG_KHOA)}" alt="Đăng Khoa" style="display:block;height:min(48vh,390px);max-width:70%;object-fit:contain;margin:16px auto;image-rendering:pixelated">
-            <div style="font-size:17px;line-height:1.9">Đã cạo râu và rửa mặt xong.<br>Đăng Khoa sẵn sàng đến gặp Mẹ Meo rồi! ♡</div>
-          </div>
-        </div>
+    elif st.session_state.scene == "game":
+        st.markdown("""
+        <style>
+          html, body, .stApp, [data-testid="stAppViewContainer"],
+          [data-testid="stMain"], [data-testid="stMainBlockContainer"] {
+            background: #241d2b !important;
+          }
+          [data-testid="stMainBlockContainer"] {
+            padding: 0 !important; margin: 0 !important; max-width: 100% !important;
+          }
+          [data-testid="stVerticalBlock"] { gap: 0 !important; }
+          [data-testid="stElementContainer"] { margin: 0 !important; }
+          iframe[title="ride_game"] {
+            display: block !important; width: 100% !important;
+            min-height: 100vh !important; border: 0 !important; margin: 0 !important;
+          }
+        </style>
         """, unsafe_allow_html=True)
+        ride_game(key="ride_game_surface", height=850, scrolling=False)
