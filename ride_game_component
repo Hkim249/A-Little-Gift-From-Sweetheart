@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Đến rước nàng</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="game-wrap">
+  <header class="topbar">
+    <div class="lives" aria-label="Số mạng còn lại"><img src="assets/character/rider_portrait.png" alt=""><span id="hearts">♥ ♥ ♥</span></div>
+    <div class="stage-label" id="stageLabel">ĐẾN RƯỚC NÀNG</div>
+    <button id="pauseBtn" class="pause" aria-label="Tạm dừng">Ⅱ</button>
+  </header>
+  <section class="game-frame">
+    <canvas id="game" width="960" height="560" aria-label="Game chạy xe Air Blade"></canvas>
+    <div class="overlay" id="overlay">
+      <div class="dialog start-dialog">
+        <div class="emoji">🏍️</div><h1>ĐẾN RƯỚC NÀNG</h1>
+        <p>Vuốt lên hoặc xuống để chuyển làn, vượt chướng ngại vật và đến rước nàng nhé!</p>
+        <p class="instructions">↑ Kéo lên: di chuyển lên<br>↓ Kéo xuống: di chuyển xuống<br>Va chạm 3 lần là thua.</p>
+        <button id="startBtn">BẮT ĐẦU CHƠI</button>
+      </div>
+    </div>
+  </section>
+  <p class="help">Vuốt hoặc kéo lên/xuống trên màn hình để chuyển giữa 2 làn đường. Máy tính: dùng phím ↑ / ↓.</p>
+</main>
+<script src="game.js"></script>
+</body>
+</html>
