@@ -1,50 +1,84 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>A Little Date</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Restaurant Date</title><link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="date-stage" id="dateStage" aria-label="Buổi hẹn hò tại nhà hàng">
-    <section class="entrance-scene" id="entranceScene" aria-label="Hai nhân vật bước vào nhà hàng">
-      <div class="restaurant-bg"></div>
-      <div class="warm-overlay"></div>
-      <div class="ambient-lights"></div>
-      <div class="couple-shadow"></div>
-      <img class="couple-walk" src="assets/couple_walk.png" alt="Đăng Khoa và Hoàng Kim nắm tay nhau bước vào nhà hàng">
-    </section>
-
-    <section class="inside-scene" id="insideScene" aria-label="Buổi trò chuyện bên bàn ăn" aria-hidden="true">
-      <div class="inside-bg"></div>
-      <div class="inside-vignette"></div>
-      <div class="dinner-couple" id="dinnerCouple">
-        <img class="dinner-girl" src="assets/girl.png" alt="Hoàng Kim">
-        <img class="dinner-boy" src="assets/boy.png" alt="Đăng Khoa">
-        <img class="gift-letter" id="giftLetter" src="assets/letter.svg" alt="Bức thư nhỏ có niêm phong trái tim">
+<main id="dateStage" class="date-stage">
+  <div id="rotatePrompt" class="rotate-prompt" role="dialog" aria-modal="true" aria-live="polite">
+    <div class="rotate-card">
+      <div class="rotate-illustration" aria-hidden="true">
+        <div class="phone phone-portrait"><span></span></div>
+        <div class="rotate-arrow">↻</div>
+        <div class="phone phone-landscape"><span></span></div>
       </div>
-      <div class="dialogue-panel" id="dialoguePanel">
-        <img class="dialogue-avatar" src="assets/girl_portrait.png" alt="Hoàng Kim">
-        <div class="dialogue-content">
-          <div class="dialogue-name">Hoàng Kim <span>♥</span></div>
-          <div class="dialogue-bubble">
-            <span id="dialogueText"></span><span class="typing-cursor" aria-hidden="true">▌</span>
-          </div>
+      <h1>Hãy xoay ngang điện thoại</h1>
+      <p class="rotate-lead">Game được thiết kế để chơi ở chế độ màn hình ngang.</p>
+      <ol class="rotate-steps">
+        <li>Giữ điện thoại bằng hai tay.</li>
+        <li>Xoay điện thoại 90° sang trái hoặc phải.</li>
+        <li>Chờ game tự chuyển sang màn hình ngang để bắt đầu.</li>
+      </ol>
+      <p class="rotate-help">Nếu màn hình không tự xoay, hãy bật <strong>Tự động xoay</strong> (Android) hoặc tắt <strong>Khóa hướng dọc</strong> (iPhone) trong Trung tâm điều khiển / Cài đặt.</p>
+      <button id="tryLandscape" type="button">Thử chuyển sang ngang</button>
+    </div>
+  </div>
+  <section id="entranceScene" class="scene entrance-scene active" aria-hidden="false">
+    <img class="scene-bg" src="assets/restaurant_entrance.jpg" alt="">
+    <div class="entrance-light"></div>
+    <span class="couple-shadow" aria-hidden="true"></span>
+    <img id="coupleWalker" class="couple-walker" src="assets/couple_walk.png" alt="Hoàng Kim và nam chính nắm tay nhau bước vào nhà hàng">
+    <div class="entrance-vignette"></div>
+  </section>
+
+  <section id="insideScene" class="scene inside-scene" aria-hidden="true">
+    <img class="scene-bg" src="assets/restaurant_inside.jpg" alt="">
+    <div class="inside-light"></div>
+    <div class="seated-layer">
+      <span class="seated-shadow girl-seat-shadow" aria-hidden="true"></span>
+      <span class="seated-shadow boy-seat-shadow" aria-hidden="true"></span>
+      <img id="dinnerGirl" class="seated girl" src="assets/characters/hoang_kim/seated_happy.png" alt="Hoàng Kim ngồi trên ghế bên trái">
+      <img id="dinnerBoy" class="seated boy" src="assets/characters/nam_chinh/seated_idle.png" alt="Nam chính ngồi trên ghế bên phải">
+    </div>
+    <div class="dialogue-panel" id="dialoguePanel">
+      <img class="portrait" src="assets/ui/hoang_kim_portrait.png" alt="Hoàng Kim">
+      <div class="dialogue-main"><div class="name-tag">Hoàng Kim <span>♥</span></div><div class="bubble"><span id="dialogueText"></span><span class="cursor">▌</span></div></div>
+    </div>
+    <div id="finishHeart" class="finish-heart" aria-hidden="true">♡</div>
+  </section>
+
+  <section id="letterScene" class="letter-scene" aria-hidden="true">
+    <div class="letter-backdrop"></div>
+    <article class="letter-paper" aria-label="Bức thư của Hoàng Kim">
+      <div class="letter-top-decoration" aria-hidden="true"><span>♥</span></div>
+      <div class="letter-content">
+        <p class="letter-greeting">Dear my boy,</p>
+        <p>Chắc cho tới khi anh nhận được quà và vào link này thì mới biết được hôm nay là ngày gì đúng hem. Hôm nay là ngày quốc tế nam giới 19/11 và em muốn dành món quà này để tri ân người đàn ông luôn ân cần ở bên em trong hơn một năm qua.</p>
+        <p>Em chúc anh sẽ luôn có một sức khỏe thật tốt và đạt được nhiều thật nhiều thành công hơn nữa trong sự nghiệp. Mong là món quà này của em sẽ giúp manifest tiền về túi anh nhiều như nước và anh sẽ thích món quà này (nhớ để hình em trong bóp hehe).</p>
+        <p>Và cuối cùng, em yêu anh nhiều lắm luôn áaaaa.</p>
+        <div class="letter-signoff">
+          <p>Cô người yêu xinh gái tinh quái của anh</p>
+          <p class="letter-signature">Hoàng Kim <span>♥</span></p>
         </div>
       </div>
-      <div class="scene-finish" id="sceneFinish" aria-hidden="true"><span>♡</span></div>
-    </section>
-  </main>
-  <script src="date.js"></script>
-  <script>
-    window.addEventListener('load', () => {
-      window.parent.postMessage({isStreamlitMessage:true,type:'streamlit:componentReady',apiVersion:1}, '*');
-      window.parent.postMessage({isStreamlitMessage:true,type:'streamlit:setFrameHeight',height:Math.max(document.documentElement.scrollHeight,700)}, '*');
-    });
-    window.addEventListener('resize', () => {
-      window.parent.postMessage({isStreamlitMessage:true,type:'streamlit:setFrameHeight',height:Math.max(document.documentElement.scrollHeight,700)}, '*');
-    });
-  </script>
-</body>
-</html>
+      <div class="letter-bottom-flourish" aria-hidden="true">✦　♥　✦</div>
+    </article>
+  </section>
+</main>
+<script src="date.js"></script>
+<script>
+window.addEventListener('load',()=>{
+  parent.postMessage({isStreamlitMessage:true,type:'streamlit:componentReady',apiVersion:1},'*');
+  const sendHeight=()=>{
+    const mobile=window.matchMedia('(pointer:coarse)').matches;
+    const portrait=window.matchMedia('(orientation:portrait)').matches;
+    const height=mobile ? Math.max(320,window.innerHeight) : Math.min(760,Math.round(window.innerWidth*9/16));
+    parent.postMessage({isStreamlitMessage:true,type:'streamlit:setFrameHeight',height:mobile&&portrait?Math.min(window.innerHeight,760):height},'*');
+  };
+  sendHeight();
+  window.addEventListener('resize',sendHeight);
+  window.addEventListener('orientationchange',()=>setTimeout(sendHeight,250));
+});
+</script>
+</body></html>
