@@ -1,0 +1,21 @@
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;overflow:hidden;background:#241d2b}
+body{font-family:Georgia,'Times New Roman',serif}
+.date-stage{position:relative;width:100%;height:min(100vh,760px);min-height:520px;overflow:hidden;background:#342331;isolation:isolate}
+.restaurant-bg{position:absolute;inset:0;background:url('assets/restaurant_background.jpg') center center/100% 100% no-repeat;z-index:-4}
+.warm-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,16,27,.03),rgba(42,20,30,.04) 58%,rgba(42,20,30,.22));z-index:-3}
+.ambient-lights{position:absolute;inset:0;background:radial-gradient(ellipse at 23% 62%,rgba(255,193,113,.18),transparent 34%),radial-gradient(ellipse at 75% 30%,rgba(255,217,155,.14),transparent 38%);animation:glow 3.8s ease-in-out infinite alternate;pointer-events:none;z-index:-2}
+.couple-shadow{position:absolute;width:min(48vw,580px);height:95px;left:50%;bottom:4%;transform:translateX(-5%);background:url('assets/couple_shadow.png') center/100% 100% no-repeat;opacity:.55;filter:blur(3px);animation:shadowWalk 5.8s cubic-bezier(.2,.72,.24,1) forwards}
+.couple-walk{position:absolute;width:clamp(280px,43vw,590px);height:auto;max-height:84%;object-fit:contain;left:53%;bottom:3%;transform-origin:50% 100%;filter:drop-shadow(0 7px 5px rgba(40,19,30,.28));animation:walkIntoRestaurant 5.8s cubic-bezier(.2,.72,.24,1) forwards,step 0.34s ease-in-out 0s 16 alternate}
+.date-message{position:absolute;left:50%;bottom:5%;transform:translate(-50%,18px);width:min(90%,650px);padding:16px 22px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;color:#fff0dc;background:rgba(54,29,43,.9);border:2px solid #e8bd91;border-radius:14px;box-shadow:0 7px 24px rgba(27,13,24,.35);opacity:0;animation:messageIn .9s ease 5.7s forwards}
+.eyebrow{font:700 11px Arial,sans-serif;letter-spacing:3px;color:#ffd3a2}
+.date-message strong{font-size:clamp(17px,2.4vw,25px);font-weight:700}
+.date-message span:last-child{font:14px Arial,sans-serif;color:#f9e2d0}
+@keyframes walkIntoRestaurant{0%{left:54%;bottom:2%;transform:translateX(0) scale(1)}18%{transform:translateX(-3vw) scale(1.02)}58%{left:31%;bottom:12%;transform:translateX(-4vw) scale(.78)}82%{left:22%;bottom:19%;transform:translateX(-3vw) scale(.62)}100%{left:19%;bottom:21%;transform:translateX(-3vw) scale(.58)}}
+@keyframes step{0%{margin-bottom:0}100%{margin-bottom:7px}}
+@keyframes shadowWalk{0%{left:56%;opacity:.55;transform:translateX(-5%) scale(1)}100%{left:20%;opacity:.18;transform:translateX(-5%) scale(.58)}}
+@keyframes glow{from{opacity:.65}to{opacity:1}}
+@keyframes messageIn{to{opacity:1;transform:translate(-50%,0)}}
+@media(max-width:650px){.date-stage{height:100vh;min-height:560px}.restaurant-bg{background-size:auto 100%;background-position:42% center}.couple-walk{width:min(74vw,440px);left:39%;bottom:6%;animation-name:walkIntoRestaurantMobile,step}.couple-shadow{width:75vw;bottom:7%;animation-name:shadowWalkMobile}.date-message{bottom:4%;padding:13px 15px}.date-message strong{font-size:17px}.date-message span:last-child{font-size:12px}}
+@keyframes walkIntoRestaurantMobile{0%{left:42%;bottom:5%;transform:scale(1)}55%{left:14%;bottom:16%;transform:scale(.75)}100%{left:5%;bottom:19%;transform:scale(.62)}}
+@keyframes shadowWalkMobile{0%{left:42%;opacity:.55;transform:translateX(-5%) scale(1)}100%{left:5%;opacity:.18;transform:translateX(-5%) scale(.62)}}
