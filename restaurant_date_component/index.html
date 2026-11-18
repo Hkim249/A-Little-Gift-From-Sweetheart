@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Restaurant Date</title><link rel="stylesheet" href="style.css"></head>
+<body><main id="dateStage" class="date-stage">
+  <section id="entranceScene" class="scene entrance-scene active" aria-hidden="false">
+    <img class="scene-bg" src="assets/restaurant_entrance.jpg" alt="">
+    <div class="entrance-depth foreground-back"></div>
+    <div class="walk-floor" aria-hidden="true"></div>
+    <div class="walk-layer">
+      <span class="character-shadow girl-shadow"></span>
+      <span class="character-shadow boy-shadow"></span>
+      <img id="walkGirl" class="walker girl-walker" src="assets/characters/hoang_kim/walk_1.png" alt="Hoàng Kim">
+      <img id="walkBoy" class="walker boy-walker" src="assets/characters/nam_chinh/walk_1.png" alt="Nam chính">
+    </div>
+    <div class="entrance-vignette"></div>
+  </section>
+  <section id="insideScene" class="scene inside-scene" aria-hidden="true">
+    <img class="scene-bg" src="assets/restaurant_inside.jpg" alt="">
+    <div class="inside-light"></div>
+    <div class="seated-layer">
+      <span class="seated-shadow girl-seat-shadow"></span>
+      <span class="seated-shadow boy-seat-shadow"></span>
+      <img id="dinnerGirl" class="seated girl" src="assets/characters/hoang_kim/seated_happy.png" alt="Hoàng Kim">
+      <img id="dinnerBoy" class="seated boy" src="assets/characters/nam_chinh/seated_idle.png" alt="Nam chính">
+      <img id="giftLetter" class="letter" src="assets/props/heart_envelope.svg" alt="Phong thư trái tim">
+    </div>
+    <div class="dialogue-panel" id="dialoguePanel">
+      <img class="portrait" src="assets/ui/hoang_kim_portrait.png" alt="Hoàng Kim">
+      <div class="dialogue-main"><div class="name-tag">Hoàng Kim <span>♥</span></div><div class="bubble"><span id="dialogueText"></span><span class="cursor">▌</span></div></div>
+    </div>
+    <div id="finishHeart" class="finish-heart" aria-hidden="true">♡</div>
+  </section>
+</main><script src="date.js"></script><script>
+window.addEventListener('load',()=>{
+  parent.postMessage({isStreamlitMessage:true,type:'streamlit:componentReady',apiVersion:1},'*');
+  parent.postMessage({isStreamlitMessage:true,type:'streamlit:setFrameHeight',height:760},'*');
+});
+</script></body></html>
