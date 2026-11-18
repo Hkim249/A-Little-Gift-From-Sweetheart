@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Restaurant Date</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="dateStage" class="date-stage">
+  <section id="entranceScene" class="scene entrance-scene active" aria-hidden="false">
+    <img class="scene-bg" src="assets/restaurant_entrance.jpg" alt="">
+    <div class="entrance-light"></div>
+    <span class="couple-shadow" aria-hidden="true"></span>
+    <img id="coupleWalker" class="couple-walker" src="assets/couple_walk.png" alt="Hoàng Kim và nam chính nắm tay nhau bước vào nhà hàng">
+    <div class="entrance-vignette"></div>
+  </section>
+
+  <section id="insideScene" class="scene inside-scene" aria-hidden="true">
+    <img class="scene-bg" src="assets/restaurant_inside.jpg" alt="">
+    <div class="inside-light"></div>
+    <div class="seated-layer">
+      <span class="seated-shadow girl-seat-shadow" aria-hidden="true"></span>
+      <span class="seated-shadow boy-seat-shadow" aria-hidden="true"></span>
+      <img id="dinnerGirl" class="seated girl" src="assets/characters/hoang_kim/seated_happy.png" alt="Hoàng Kim ngồi trên ghế bên trái">
+      <img id="dinnerBoy" class="seated boy" src="assets/characters/nam_chinh/seated_idle.png" alt="Nam chính ngồi trên ghế bên phải">
+    </div>
+    <div class="dialogue-panel" id="dialoguePanel">
+      <img class="portrait" src="assets/ui/hoang_kim_portrait.png" alt="Hoàng Kim">
+      <div class="dialogue-main"><div class="name-tag">Hoàng Kim <span>♥</span></div><div class="bubble"><span id="dialogueText"></span><span class="cursor">▌</span></div></div>
+    </div>
+    <div id="finishHeart" class="finish-heart" aria-hidden="true">♡</div>
+  </section>
+</main>
+<script src="date.js"></script>
+<script>
+window.addEventListener('load',()=>{
+  parent.postMessage({isStreamlitMessage:true,type:'streamlit:componentReady',apiVersion:1},'*');
+  parent.postMessage({isStreamlitMessage:true,type:'streamlit:setFrameHeight',height:760},'*');
+});
+</script>
+</body></html>
