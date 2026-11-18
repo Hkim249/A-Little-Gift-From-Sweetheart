@@ -430,4 +430,4 @@ else:
           }
         </style>
         """, unsafe_allow_html=True)
-        restaurant_date(key="restaurant_date_surface", height=760, scrolling=False)
+        restaurant_date(key="restaurant_date_scene_v3", height=760, scrolling=False)
