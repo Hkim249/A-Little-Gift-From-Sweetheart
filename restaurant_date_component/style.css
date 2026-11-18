@@ -1,6 +1,29 @@
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#241d2d}
-.date-stage{position:relative;width:100%;height:min(760px,100vh);min-height:520px;overflow:hidden;background:#241d2d;isolation:isolate;image-rendering:pixelated}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#241d2d;font-family:Arial,"Helvetica Neue",sans-serif;letter-spacing:normal;word-spacing:normal}
+.date-stage{position:relative;width:100%;height:min(760px,56.25vw,100dvh);min-height:520px;max-width:1280px;margin:0 auto;overflow:hidden;background:#241d2d;isolation:isolate;image-rendering:pixelated}
+/* Portrait-phone gate: the interactive scene cannot be played until landscape. */
+.rotate-prompt{display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;padding:22px;background:radial-gradient(ellipse at center,#563449,#1c1420 78%);color:#fff4ec;text-align:center;font-family:Arial,sans-serif;letter-spacing:normal}
+.rotate-card{width:min(460px,100%);max-height:94dvh;overflow:auto;padding:22px 22px 24px;border:2px solid #d69a9d;border-radius:18px;background:rgba(43,24,39,.97);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.rotate-illustration{height:112px;display:flex;align-items:center;justify-content:center;gap:18px;margin:0 auto 10px;color:#ffc4c8}
+.phone{position:relative;border:4px solid #f7d9d1;border-radius:12px;background:linear-gradient(145deg,#6f3a50,#2c1d31);box-shadow:0 5px 0 rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.12)}
+.phone:before{content:"";position:absolute;top:4px;left:50%;width:18px;height:3px;border-radius:4px;background:#f7d9d1;transform:translateX(-50%)}
+.phone:after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;border-radius:50%;background:#f7d9d1;transform:translateX(-50%)}
+.phone-portrait{width:43px;height:76px;animation:phoneTilt 2.4s ease-in-out infinite}
+.phone-landscape{width:76px;height:43px;border-color:#ffc4c8;box-shadow:0 0 18px rgba(255,196,200,.24)}
+.phone-landscape:before{top:50%;left:4px;width:3px;height:15px;transform:translateY(-50%)}
+.phone-landscape:after{bottom:auto;left:auto;right:4px;top:50%;transform:translateY(-50%)}
+.rotate-arrow{font-size:38px;line-height:1;color:#ffc4c8;animation:arrowPulse 1.2s ease-in-out infinite}
+@keyframes phoneTilt{0%,20%{transform:rotate(0)}65%,85%{transform:rotate(90deg)}100%{transform:rotate(90deg)}}
+@keyframes arrowPulse{50%{transform:rotate(35deg) scale(1.12)}}
+.rotate-card h1{font-size:clamp(22px,5vw,30px);margin:0 0 8px}
+.rotate-card p{font-size:15px;line-height:1.48;margin:0 0 12px}
+.rotate-card .rotate-lead{color:#f8d9d8}
+.rotate-steps{margin:0 0 13px;padding-left:24px;text-align:left;color:#fff4ec;font-size:14px;line-height:1.55}
+.rotate-steps li{padding-left:3px;margin:3px 0}
+.rotate-help{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.08);font-size:13px!important;color:#f4d8d8}
+.rotate-card button{border:2px solid #f3c6c7;border-radius:10px;padding:12px 18px;background:#8c4057;color:#fff8f1;font-size:16px;font-weight:700;cursor:pointer}
+@media(max-height:620px){.rotate-card{padding:12px 18px}.rotate-illustration{height:72px;margin-bottom:4px}.phone-portrait{height:58px}.rotate-card h1{font-size:22px}.rotate-card p{font-size:13px}.rotate-steps{font-size:12px;line-height:1.35}.rotate-help{font-size:12px!important;margin-bottom:8px!important}}
+@media (pointer:coarse) and (orientation:portrait) and (max-width:900px){.rotate-prompt{display:flex}.date-stage{height:100dvh;min-height:0;max-width:none}}
 .scene{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .9s ease;isolation:isolate}
 .scene.active{opacity:1;visibility:visible}
 .scene-bg{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;object-position:center;image-rendering:pixelated}
@@ -25,10 +48,24 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#241d2d}
 .dialogue-panel{position:absolute;z-index:10;left:4%;right:4%;bottom:3%;min-height:118px;display:flex;align-items:center;gap:14px;padding:12px 18px;background:linear-gradient(180deg,#fff2e8,#f4dce2);border:4px solid #784454;outline:3px solid #f9e8df;box-shadow:0 5px 0 rgba(38,19,31,.5);border-radius:18px;opacity:0;transform:translateY(25px);transition:all .55s ease}
 .dialogue-panel.show{opacity:1;transform:translateY(0)}
 .portrait{width:100px;height:100px;object-fit:contain;object-position:bottom;image-rendering:pixelated}
-.dialogue-main{flex:1;min-width:0}.name-tag{display:inline-block;margin-bottom:5px;padding:4px 14px;background:#80394f;color:#fff3e8;border:2px solid #f4c9ce;border-radius:9px;font:700 16px Arial,sans-serif}.name-tag span{color:#ffb7c8}
-.bubble{color:#49323d;font:700 clamp(16px,2.1vw,24px)/1.5 Arial,sans-serif;min-height:46px}.cursor{animation:blink .8s steps(2) infinite}@keyframes blink{50%{opacity:0}}
+.dialogue-main{flex:1;min-width:0}.name-tag{letter-spacing:normal;word-spacing:normal;font-family:Arial,sans-serif;display:inline-block;margin-bottom:5px;padding:4px 14px;background:#80394f;color:#fff3e8;border:2px solid #f4c9ce;border-radius:9px;font:700 16px Arial,sans-serif}.name-tag span{color:#ffb7c8}
+.bubble{letter-spacing:normal;word-spacing:normal;font-family:Arial,sans-serif;color:#49323d;font:700 clamp(16px,2.1vw,24px)/1.5 Arial,sans-serif;min-height:46px}.cursor{animation:blink .8s steps(2) infinite}@keyframes blink{50%{opacity:0}}
 .finish-heart{position:absolute;z-index:11;left:50%;top:25%;font-size:clamp(50px,9vw,110px);color:#ff8fae;text-shadow:0 0 20px #ffb5cb;opacity:0;transform:translate(-50%,15px) scale(.6);transition:all .7s ease}.finish-heart.show{opacity:1;transform:translate(-50%,0) scale(1)}
-@media(max-width:700px){.date-stage{min-height:480px}.couple-walker{width:43%;left:58%;bottom:5%}@keyframes walkToDoor{0%{left:58%;bottom:5%;width:43%;transform:translate(0,0)}50%{left:39%;bottom:15%;width:32%;transform:translate(0,-3px)}100%{left:15%;bottom:30%;width:20%;transform:translate(0,0)}}@keyframes shadowToDoor{0%{left:61%;bottom:6%;width:29%}100%{left:17%;bottom:31%;width:15%}}.seated.girl{left:10%;height:24%}.seated.boy{right:10%;height:25%}.seated{bottom:35%;max-width:29%}.seated-shadow{bottom:34.5%}.girl-seat-shadow{left:12%}.boy-seat-shadow{right:12%}.dialogue-panel{left:2%;right:2%;padding:8px;min-height:92px;gap:6px}.portrait{width:65px;height:70px}.name-tag{font-size:12px}.bubble{font-size:15px}}
+@media (pointer:coarse) and (orientation:landscape) and (max-height:600px){
+  .date-stage{width:100vw;height:100dvh;min-height:0;max-width:none}
+  .couple-walker{width:34%;left:64%;bottom:2%}
+  @keyframes walkToDoor{0%{left:64%;bottom:2%;width:34%;transform:translate(0,0)}50%{left:42%;bottom:12%;width:27%;transform:translate(0,-3px)}100%{left:14%;bottom:24%;width:17%;transform:translate(0,0)}}
+  @keyframes shadowToDoor{0%{left:67%;bottom:3%;width:24%}100%{left:17%;bottom:25%;width:13%}}
+  .seated{bottom:32%;height:31%;max-width:27%}
+  .seated.girl{left:12%;height:29%}.seated.boy{right:12%;height:30%}
+  .seated-shadow{bottom:31.5%}.girl-seat-shadow{left:14%}.boy-seat-shadow{right:14%}
+  .dialogue-panel{left:3%;right:3%;bottom:2%;min-height:82px;padding:6px 12px;gap:8px}
+  .portrait{width:62px;height:64px}.name-tag{font-size:13px}.bubble{font-size:clamp(14px,2.4vh,19px);line-height:1.35}
+  .letter-scene{padding:8px}.letter-paper{width:min(900px,96%);height:96%;padding:14px 24px 8px}.letter-top-decoration{margin-bottom:4px}.letter-content{font-size:clamp(13px,2.5vh,17px);line-height:1.42}.letter-content p{margin-bottom:8px}.letter-greeting{font-size:clamp(18px,3vh,23px);margin-bottom:10px!important}.letter-signoff{margin-top:8px}.letter-signature{font-size:clamp(18px,3vh,23px)}.letter-bottom-flourish{padding-top:3px}
+}
+@media (min-width:701px) and (pointer:fine){.date-stage{width:min(100%,1280px);height:min(760px,56.25vw,100dvh);min-height:520px}}
+@media (max-width:700px) and (pointer:fine){.date-stage{width:100%;height:min(760px,100dvh);min-height:520px}}
+
 
 
 /* Full-screen love letter shown automatically after the male character receives the envelope. */
@@ -39,12 +76,12 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#241d2d}
 .letter-paper:before{content:"";position:absolute;inset:12px;border:1px solid rgba(145,79,83,.38);pointer-events:none}
 .letter-top-decoration{position:relative;flex:0 0 auto;text-align:center;color:#9e4057;font-size:25px;line-height:1;margin-bottom:8px;text-shadow:0 1px #fff}
 .letter-top-decoration:before,.letter-top-decoration:after{content:"";display:inline-block;width:min(26%,150px);height:1px;background:#c28a82;vertical-align:middle;margin:0 14px}
-.letter-content{position:relative;z-index:1;overflow-y:auto;overscroll-behavior:contain;padding:4px clamp(2px,1vw,10px) 10px;color:#49343a;font-family:Georgia,'Times New Roman',serif;font-size:clamp(15px,1.65vw,19px);line-height:1.62;scrollbar-width:thin;scrollbar-color:#bd8586 transparent}
+.letter-content{letter-spacing:normal;word-spacing:normal;font-kerning:normal;text-rendering:optimizeLegibility;font-family:Arial,"Helvetica Neue",sans-serif;position:relative;z-index:1;overflow-y:auto;overscroll-behavior:contain;padding:4px clamp(2px,1vw,10px) 10px;color:#49343a;font-family:Georgia,'Times New Roman',serif;font-size:clamp(15px,1.65vw,19px);line-height:1.62;scrollbar-width:thin;scrollbar-color:#bd8586 transparent}
 .letter-content p{margin:0 0 14px}
-.letter-greeting{font-size:clamp(20px,2.4vw,27px);font-weight:700;color:#813e50;margin-bottom:18px!important}
+.letter-greeting{letter-spacing:normal;font-size:clamp(20px,2.4vw,27px);font-weight:700;color:#813e50;margin-bottom:18px!important}
 .letter-signoff{text-align:right;margin-top:18px;padding-right:3px}
 .letter-signoff p{margin-bottom:5px}
-.letter-signature{font-size:clamp(21px,2.5vw,28px);font-weight:700;font-style:italic;color:#873d53}
+.letter-signature{letter-spacing:normal;font-size:clamp(21px,2.5vw,28px);font-weight:700;font-style:italic;color:#873d53}
 .letter-signature span{font-family:Arial,sans-serif;color:#c75e75;font-style:normal}
 .letter-bottom-flourish{position:relative;flex:0 0 auto;text-align:center;padding-top:7px;color:#a35d68;font-size:16px;letter-spacing:3px}
 @keyframes letterUnfold{0%{opacity:0;transform:translateY(30px) scale(.92) rotateX(8deg)}100%{opacity:1;transform:translateY(0) scale(1) rotateX(0)}}

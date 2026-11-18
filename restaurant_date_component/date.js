@@ -2,6 +2,22 @@
 const $=id=>document.getElementById(id);
 const entrance=$('entranceScene'),inside=$('insideScene'),letterScene=$('letterScene'),text=$('dialogueText'),panel=$('dialoguePanel'),girl=$('dinnerGirl'),boy=$('dinnerBoy'),heart=$('finishHeart');
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const rotatePrompt=$('rotatePrompt'),tryLandscape=$('tryLandscape');
+const isPhone=()=>window.matchMedia('(pointer:coarse)').matches && Math.min(window.innerWidth,window.innerHeight)<=900;
+const isPortrait=()=>window.matchMedia('(orientation:portrait)').matches;
+let started=false;
+function orientationReady(){return !isPhone() || !isPortrait()}
+function updateOrientationGate(){
+  const blocked=!orientationReady();
+  if(rotatePrompt) rotatePrompt.style.display=blocked?'flex':'none';
+  if(!blocked && !started){started=true;runDate();}
+}
+if(tryLandscape){tryLandscape.addEventListener('click',async()=>{
+  try{if(screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape');}catch(_e){}
+  setTimeout(updateOrientationGate,250);
+});}
+window.addEventListener('resize',updateOrientationGate);
+window.addEventListener('orientationchange',()=>setTimeout(updateOrientationGate,250));
 function typeLine(line){return new Promise(resolve=>{let i=0;text.textContent='';const timer=setInterval(()=>{text.textContent+=line.charAt(i++);if(i>=line.length){clearInterval(timer);resolve()}},38)})}
 async function showLine(line){panel.classList.add('show');await typeLine(line)}
 async function runDate(){
@@ -30,5 +46,5 @@ async function runDate(){
   inside.classList.remove('active');inside.setAttribute('aria-hidden','true');
   letterScene.classList.add('show');letterScene.setAttribute('aria-hidden','false');
 }
-runDate();
+updateOrientationGate();
 })();
