@@ -297,11 +297,11 @@ st.markdown("""
 <style>
 div[data-testid="stElementContainer"]:has(iframe[title="streamlit.components.v1.html"]) {
     position:fixed!important; top:8px!important; right:8px!important;
-    width:142px!important; height:52px!important; z-index:999999!important;
+    width:160px!important; height:52px!important; z-index:999999!important;
     margin:0!important; padding:0!important;
 }
 iframe[title="streamlit.components.v1.html"] {
-    width:142px!important; height:52px!important; border:0!important;
+    width:160px!important; height:52px!important; border:0!important;
     background:transparent!important;
 }
 </style>
@@ -314,104 +314,80 @@ music_html = """
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;width:150px;height:52px;overflow:hidden;background:transparent}
-button{
- width:150px;height:44px;border:1px solid rgba(255,225,238,.9);
- border-radius:24px;background:rgba(48,31,52,.96);color:#fff4f8;
- font:600 13px/1 system-ui,sans-serif;cursor:pointer;
- box-shadow:0 3px 14px rgba(0,0,0,.24)
-}
-button:active{transform:scale(.97)}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; width: 160px; height: 52px; overflow: hidden; background: transparent; }
+button { width: 156px; height: 44px; padding: 0 10px; border: 1px solid rgba(255,225,238,.92); border-radius: 24px; background: rgba(48,31,52,.96); color: #fff4f8; font: 600 13px/1 system-ui,sans-serif; cursor: pointer; white-space: nowrap; box-shadow: 0 3px 14px rgba(0,0,0,.24); }
+button:active { transform: scale(.97); }
 </style>
 </head>
 <body>
-<button id="toggle" type="button" aria-pressed="false">♫ Bật nhạc</button>
+<button id="musicToggle" type="button" aria-pressed="false">♫ Đang tải nhạc...</button>
+<audio id="lofiAudio" loop preload="auto"></audio>
 <script>
 (() => {
- const button=document.getElementById('toggle');
- if (!button || button.dataset.ready==='1') return;
- button.dataset.ready='1';
+  const audio = document.getElementById("lofiAudio");
+  const button = document.getElementById("musicToggle");
+  if (!audio || !button || button.dataset.bound === "1") return;
+  button.dataset.bound = "1";
+  audio.src = "data:audio/wav;base64,__AUDIO_B64__";
+  audio.volume = 1.0;
 
- let ctx=null, master=null, timer=null, noteIndex=0, isPlaying=false;
- const bpm=76, beat=60/bpm;
- // A gentle original lo-fi progression: Dmaj7 – Bm7 – Gmaj7 – Aadd9.
- const chords=[
-   [146.83,185.00,220.00,277.18],
-   [123.47,146.83,185.00,220.00],
-   [98.00,123.47,146.83,185.00],
-   [110.00,138.59,164.81,220.00]
- ];
- const melody=[
-   587.33,0,493.88,440.00,0,369.99,440.00,0,
-   493.88,0,440.00,369.99,0,329.63,369.99,0,
-   440.00,0,369.99,329.63,0,293.66,329.63,0,
-   493.88,0,440.00,369.99,0,329.63,369.99,0
- ];
- function tone(freq, start, duration, volume, type, filterFreq){
-   const osc=ctx.createOscillator(), gain=ctx.createGain(), filter=ctx.createBiquadFilter();
-   osc.type=type||'sine'; osc.frequency.setValueAtTime(freq,start);
-   filter.type='lowpass'; filter.frequency.setValueAtTime(filterFreq||1800,start);
-   gain.gain.setValueAtTime(0.0001,start);
-   gain.gain.exponentialRampToValueAtTime(Math.max(volume,0.0002),start+0.18);
-   gain.gain.setValueAtTime(Math.max(volume,0.0002),start+Math.max(.2,duration-.35));
-   gain.gain.exponentialRampToValueAtTime(0.0001,start+duration);
-   osc.connect(filter); filter.connect(gain); gain.connect(master);
-   osc.start(start); osc.stop(start+duration+.03);
- }
- function scheduleBar(){
-   const barStart=ctx.currentTime+.04;
-   const chord=chords[Math.floor(noteIndex/8)%4];
-   chord.forEach((f,i)=>tone(f,barStart,beat*8,.018,'sine',850));
-   // Soft bass pulse.
-   tone(chord[0]/2,barStart,beat*3,.055,'triangle',260);
-   tone(chord[0]/2,barStart+beat*4,beat*3,.035,'triangle',260);
-   for(let i=0;i<8;i++){
-     const n=melody[(noteIndex*8+i)%melody.length];
-     if(n) tone(n,barStart+i*beat,.58,.025,'triangle',2200);
-   }
-   noteIndex++;
- }
- async function start(){
-   const AC=window.AudioContext||window.webkitAudioContext;
-   if(!AC){button.textContent='Không hỗ trợ âm thanh';return false;}
-   if(!ctx){ctx=new AC();master=ctx.createGain();master.gain.value=.55;master.connect(ctx.destination);}
-   try{await ctx.resume();}catch(e){return false;}
-   if(ctx.state!=='running') return false;
-   if(timer) clearInterval(timer);
-   isPlaying=true; scheduleBar();
-   timer=setInterval(scheduleBar,beat*8*1000);
-   button.textContent='♫ Tắt nhạc';button.setAttribute('aria-pressed','true');
-   try{localStorage.setItem('littleGiftMusicEnabled','true')}catch(e){}
-   return true;
- }
- function stop(){
-   isPlaying=false;
-   if(timer){clearInterval(timer);timer=null;}
-   if(master && ctx){master.gain.cancelScheduledValues(ctx.currentTime);master.gain.setTargetAtTime(.0001,ctx.currentTime,.04);}
-   button.textContent='♪ Bật nhạc';button.setAttribute('aria-pressed','false');
-   try{localStorage.setItem('littleGiftMusicEnabled','false')}catch(e){}
- }
- button.addEventListener('click',async()=>{
-   if(isPlaying){stop();return;}
-   if(await start()) return;
-   button.textContent='Chạm để bật nhạc';
- });
- let shouldTry=true;
- try{shouldTry=localStorage.getItem('littleGiftMusicEnabled')!=='false'}catch(e){}
- if(shouldTry){
-   // Browsers may block autoplay in an iframe; the button remains available.
-   start().then(ok=>{if(!ok)button.textContent='♫ Chạm để bật nhạc';});
- } else {
-   button.textContent='♪ Bật nhạc';
- }
+  const setButton = (label, playing) => {
+    button.textContent = label;
+    button.setAttribute("aria-pressed", playing ? "true" : "false");
+  };
+  const save = (enabled) => {
+    try { localStorage.setItem("littleGiftMusicEnabled", enabled ? "true" : "false"); } catch (e) {}
+  };
+
+  audio.addEventListener("playing", () => setButton("♫ Tắt nhạc", true));
+  audio.addEventListener("pause", () => {
+    if (!audio.ended) setButton("♪ Bật nhạc", false);
+  });
+  audio.addEventListener("error", () => {
+    const code = audio.error ? audio.error.code : "unknown";
+    setButton("Lỗi tải nhạc: " + code, false);
+  });
+
+  async function playAudio(fromTap) {
+    try {
+      audio.muted = false;
+      audio.volume = 1.0;
+      await audio.play();
+      save(true);
+      setButton("♫ Tắt nhạc", true);
+      return true;
+    } catch (error) {
+      const name = error && error.name ? error.name : "PlayError";
+      setButton(fromTap ? "Không phát được: " + name : "♫ Chạm để bật nhạc", false);
+      return false;
+    }
+  }
+
+  button.addEventListener("click", async () => {
+    if (!audio.paused) {
+      audio.pause();
+      save(false);
+      setButton("♪ Bật nhạc", false);
+    } else {
+      await playAudio(true);
+    }
+  });
+
+  let enabled = true;
+  try { enabled = localStorage.getItem("littleGiftMusicEnabled") !== "false"; } catch (e) {}
+  if (enabled) {
+    playAudio(false);
+  } else {
+    setButton("♪ Bật nhạc", false);
+  }
 })();
 </script>
 </body>
 </html>
-"""
+""".replace("__AUDIO_B64__", MUSIC_B64)
+components.html(music_html, height=52, scrolling=False, width=160)
 
-components.html(music_html, height=52, scrolling=False, width=150)
 
 if st.session_state.scene == "title":
     with st.container(key="title_screen"):
