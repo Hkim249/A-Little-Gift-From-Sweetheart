@@ -61,7 +61,7 @@
     window.parent.postMessage({
       isStreamlitMessage: true,
       type: "streamlit:setFrameHeight",
-      height: Math.max(document.documentElement.scrollHeight, 700)
+      height: Math.max(240, window.innerHeight)
     }, "*");
   }
   window.addEventListener("load", notifyStreamlitReady);
@@ -69,7 +69,7 @@
     window.parent.postMessage({
       isStreamlitMessage: true,
       type: "streamlit:setFrameHeight",
-      height: Math.max(document.documentElement.scrollHeight, 700)
+      height: Math.max(240, window.innerHeight)
     }, "*");
   });
 </script>

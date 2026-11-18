@@ -307,11 +307,11 @@ else:
           [data-testid="stElementContainer"] { margin: 0 !important; }
           iframe[title="ride_game"] {
             display: block !important; width: 100% !important;
-            min-height: 100vh !important; border: 0 !important; margin: 0 !important;
+            min-height: 0 !important; height: 100svh !important; border: 0 !important; margin: 0 !important;
           }
         </style>
         """, unsafe_allow_html=True)
-        game_result = ride_game(key="ride_game_surface", height=760, scrolling=False, default=None)
+        game_result = ride_game(key="ride_game_surface", height=420, scrolling=False, default=None)
         # Component value is sent only when the player presses the victory Continue button.
         # Accept the normal scalar value and mapping-shaped values for compatibility.
         game_won = (
@@ -335,7 +335,7 @@ else:
           [data-testid="stElementContainer"] { margin: 0 !important; }
           iframe[title="restaurant_date"] {
             display: block !important; width: 100% !important;
-            min-height: 100vh !important; border: 0 !important; margin: 0 !important;
+            min-height: 0 !important; height: 100svh !important; border: 0 !important; margin: 0 !important;
           }
         </style>
         """, unsafe_allow_html=True)
