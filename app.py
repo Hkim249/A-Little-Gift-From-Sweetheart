@@ -402,8 +402,14 @@ else:
           }
         </style>
         """, unsafe_allow_html=True)
-        game_result = ride_game(key="ride_game_surface", height=760, scrolling=False)
-        if game_result == "won":
+        game_result = ride_game(key="ride_game_surface", height=760, scrolling=False, default=None)
+        # Component value is sent only when the player presses the victory Continue button.
+        # Accept the normal scalar value and mapping-shaped values for compatibility.
+        game_won = (
+            game_result == "won"
+            or (isinstance(game_result, dict) and game_result.get("value") == "won")
+        )
+        if game_won:
             st.session_state.scene = "restaurant_date"
             st.rerun()
     elif st.session_state.scene == "restaurant_date":
