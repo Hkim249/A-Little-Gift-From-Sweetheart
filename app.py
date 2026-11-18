@@ -102,46 +102,137 @@ if "shaved_hairs" not in st.session_state:
 
 st.markdown("""
 <style>
-/* Mobile orientation gate: block the entire app until the phone is landscape. */
-@media screen and (max-width: 900px) and (orientation: portrait) {
-  html, body, .stApp { overflow: hidden !important; }
-  .stApp::before {
-    content: "HÃY XOAY NGANG ĐIỆN THOẠI\\A\\A📱  Xoay màn hình 90° sang trái hoặc phải\\A\\A1. Mở Trung tâm điều khiển / Cài đặt nhanh.\\A2. Bật Tự động xoay (Auto-rotate).\\A3. Xoay điện thoại nằm ngang để bắt đầu.\\A\\A♡ Game sẽ tự mở khi màn hình đã nằm ngang.";
-    white-space: pre-line;
-    position: fixed !important; inset: 0 !important; z-index: 2147483647 !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    padding: 28px 24px !important; text-align: center !important;
-    color: #fff1e8 !important; background: radial-gradient(circle at 50% 20%, #69465f, #211a2c 72%) !important;
-    font: 700 clamp(15px, 4.3vw, 21px)/1.8 Arial, sans-serif !important;
-    text-shadow: 2px 2px #211a2c !important;
-    border: 8px solid #b98291 !important; box-sizing: border-box !important;
-    pointer-events: auto !important;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;font-family:'Be Vietnam Pro',Arial,sans-serif!important}
+html,body,.stApp,[data-testid="stAppViewContainer"]{
+    margin:0!important;padding:0!important;background:#171321!important
+}
+#MainMenu,footer,header{visibility:hidden}
+.block-container,[data-testid="stMainBlockContainer"]{
+    max-width:none!important;width:100%!important;padding:0!important;margin:0!important
+}
+/* Hide accidental code/preformatted panels so only the game UI is visible. */
+div[data-testid="stCode"],.stCode,pre{display:none!important}
+div[data-testid="stButton"] button{
+    border:3px solid #70465e;border-radius:0;background:#f4c0d0;color:#58384d;
+    font-family:'Be Vietnam Pro',Arial,sans-serif;font-size:13px;font-weight:700;
+    box-shadow:4px 4px 0 #9e7189;padding:.75rem 1rem
+}
+div[data-testid="stButton"] button:hover{
+    background:#ffe0e8;color:#58384d;border-color:#70465e;
+    transform:translate(2px,2px);box-shadow:2px 2px 0 #9e7189
 }
 
-/* Landscape-phone layout: mirror the desktop composition without mobile stacking. */
-@media screen and (orientation: landscape) and (max-height: 520px) and (pointer: coarse) {
-  html, body, .stApp, [data-testid="stAppViewContainer"],
-  [data-testid="stMain"], [data-testid="stMainBlockContainer"] {
-    width:100vw !important; min-width:0 !important; height:100svh !important;
-    min-height:0 !important; overflow:hidden !important;
-  }
-  [data-testid="stMainBlockContainer"] {
-    padding:0 !important; margin:0 !important; max-width:none !important;
-  }
-  [data-testid="stVerticalBlock"] { gap:0 !important; }
-  [data-testid="stElementContainer"] { margin:0 !important; }
-  .stButton { width:auto !important; }
-  .stButton > button { min-height:38px !important; padding:6px 14px !important; font-size:clamp(12px,2.2vh,16px) !important; }
-  iframe[title="ride_game"], iframe[title="restaurant_date"],
-  iframe[title="wash_face_game"], iframe[title="shave_drag_game"] {
-    display:block !important; width:100vw !important; height:100svh !important;
-    min-height:100svh !important; max-height:100svh !important;
-    border:0 !important; margin:0 !important;
-  }
-  .room-page, .bathroom-page, .title-background { width:100vw !important; height:100svh !important; }
+/* Full-screen title image; invisible hit-area overlays the illustrated START. */
+.st-key-title_screen{
+    position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;
+    z-index:100!important;margin:0!important;padding:0!important
+}
+.st-key-title_screen [data-testid="stMarkdownContainer"]{margin:0!important;padding:0!important}
+.title-background{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden}
+.title-background img{width:100%;height:100%;display:block;object-fit:fill;image-rendering:pixelated}
+.st-key-title_screen div[data-testid="stButton"]{
+    position:fixed!important;left:66.5vw!important;top:74.5vh!important;
+    width:24vw!important;height:14vh!important;z-index:110!important;margin:0!important;padding:0!important
+}
+.st-key-title_screen div[data-testid="stButton"] button{
+    width:100%;height:100%;min-height:0;padding:0;opacity:0;color:transparent;
+    background:transparent;border:0;box-shadow:none
+}
+.st-key-title_screen div[data-testid="stButton"] button:hover{
+    opacity:0;background:transparent;border:0;box-shadow:none;transform:none
 }
 
+/* Bedroom scene */
+.room-page{
+    min-height:100vh;width:100%;padding:18px 2vw 28px;
+    background:linear-gradient(180deg,#241d35,#49334b);animation:fadeIn 1s ease both
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.room-frame{
+    position:relative;width:min(1200px,96vw);margin:0 auto;aspect-ratio:16/9;
+    min-height:480px;overflow:hidden;border:5px solid #67485e;
+    box-shadow:8px 8px 0 #241d35;background:#b88b9a
+}
+.room-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+.room-tint{position:absolute;inset:0;background:linear-gradient(90deg,rgba(31,23,39,.04),transparent 50%,rgba(31,23,39,.04));pointer-events:none}
+.room-title{
+    position:absolute;z-index:4;left:1.5%;top:2%;padding:9px 11px;
+    color:#604454;background:#fff0df;border:3px solid #805a61;
+    box-shadow:3px 3px #b88d87;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8
+}
+.khoa-sprite{
+    position:absolute;z-index:5;left:48%;bottom:3%;height:66%;max-width:19%;
+    width:auto;object-fit:contain;image-rendering:pixelated;
+    filter:drop-shadow(3px 4px 0 rgba(25,17,25,.55))
+}
+.phone-notification{
+    position:absolute;z-index:8;right:2%;top:3%;width:min(340px,34%);
+    padding:13px 15px;background:#fff5eb;border:4px solid #76536a;
+    box-shadow:5px 5px #b88799;animation:popIn .5s ease 1s both;opacity:0
+}
+@keyframes popIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+.notification-head{font:700 11px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8;color:#98647a;border-bottom:2px solid #e5cbd0;padding-bottom:7px}
+.notification-message{font:18px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.15;color:#493447;padding-top:7px}
+.hint{color:#f7d8e4;text-align:center;margin:14px auto 8px;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8}
+.chat-panel{
+    width:min(720px,94vw);margin:18px auto 30px;padding:17px;
+    background:#fff5ec;border:5px solid #76536a;box-shadow:6px 6px #9c7186
+}
+.chat-header{color:#89576e;font:700 14px 'Be Vietnam Pro',Arial,sans-serif;border-bottom:3px solid #eed9df;padding-bottom:12px;line-height:1.8}
+.chat-message{display:flex;align-items:center;gap:13px;margin:15px 0}
+.chat-avatar{width:76px;height:92px;object-fit:contain;image-rendering:pixelated;flex:0 0 auto}
+.chat-bubble{max-width:80%;padding:10px 14px;color:#573c4b;background:#f8dce7;border:3px solid #d99bb1;font:17px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.2}
+.chat-bubble.player{margin-left:auto;background:#e6edf8;border-color:#aabbd8}
+.chat-message.player-row{justify-content:flex-end}
+.chat-message.player-row .chat-bubble{margin-left:0}
+.chat-panel,.chat-panel *{font-family:'Be Vietnam Pro',Arial,sans-serif!important;overflow-wrap:anywhere}
+.chat-caption{text-align:center;color:#896a78;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.9;margin:10px 0}
+/* Bathroom scene: same pixel-art framing and soft fade transition */
+.bathroom-page{
+    min-height:100vh;width:100%;padding:18px 2vw 28px;
+    background:linear-gradient(180deg,#241d35,#49334b);animation:fadeIn 1.2s ease both
+}
+.bathroom-frame{
+    position:relative;width:min(1200px,96vw);margin:0 auto;aspect-ratio:16/9;
+    min-height:480px;overflow:hidden;border:5px solid #67485e;
+    box-shadow:8px 8px 0 #241d35;background:#b88b9a
+}
+.bathroom-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+.bathroom-title{
+    position:absolute;z-index:4;left:1.5%;top:2%;padding:9px 11px;
+    color:#604454;background:#fff0df;border:3px solid #805a61;
+    box-shadow:3px 3px #b88d87;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8
+}
+.prepare-hint{color:#f7d8e4;text-align:center;margin:14px auto 8px;font:700 12px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8}
+
+.task-instruction{color:#f7d8e4;text-align:center;margin:14px auto 10px;font:700 13px 'Be Vietnam Pro',Arial,sans-serif;line-height:1.8}
+.task-status{color:#f9e5ed;text-align:center;margin:8px auto 12px;font:600 12px 'Be Vietnam Pro',Arial,sans-serif}
+.shave-page{min-height:100vh;padding:20px 3vw 34px;background:linear-gradient(180deg,#241d35,#49334b);animation:fadeIn .8s ease both}
+.shave-card{max-width:850px;margin:0 auto;padding:22px;background:#fff3e9;border:5px solid #76536a;box-shadow:7px 7px #241d35;text-align:center}
+.shave-face{position:relative;width:min(470px,78vw);height:330px;margin:12px auto 18px;border:4px solid #8a5e68;border-radius:48% 48% 42% 42%;background:linear-gradient(145deg,#f6c6a9,#e9a98f);box-shadow:inset -12px -10px #d99283,5px 6px #c58a91;overflow:hidden}
+.shave-nose{position:absolute;left:48%;top:43%;width:22px;height:28px;border-right:4px solid #a76c68;border-bottom:4px solid #a76c68;transform:rotate(25deg);border-radius:0 0 12px 0}
+.shave-mouth{position:absolute;left:38%;top:57%;width:25%;height:22px;border-bottom:7px solid #783e4a;border-radius:0 0 50% 50%}
+.shave-hair{position:absolute;width:7px;height:35px;background:#3c3035;border-radius:5px;transform-origin:bottom;box-shadow:1px 1px #241d35;transition:transform .55s ease,opacity .55s ease}
+.shave-hair.fallen{transform:translate(35px,95px) rotate(85deg);opacity:0}
+.shave-hair.h1{left:27%;top:69%;transform:rotate(-25deg)}.shave-hair.h2{left:34%;top:75%;transform:rotate(12deg)}.shave-hair.h3{left:42%;top:70%;transform:rotate(-12deg)}.shave-hair.h4{left:49%;top:77%;transform:rotate(18deg)}.shave-hair.h5{left:57%;top:70%;transform:rotate(-18deg)}.shave-hair.h6{left:65%;top:75%;transform:rotate(20deg)}.shave-hair.h7{left:72%;top:68%;transform:rotate(30deg)}
+.shave-tip{color:#745064;font-weight:700;line-height:1.8;margin:8px auto 14px}
+@media(max-width:700px){.shave-face{height:260px}.shave-card{padding:12px}}
+div[data-testid="stButton"] button:disabled{background:#aaa4aa!important;color:#5f5961!important;border:3px solid #77717a!important;box-shadow:4px 4px 0 #514b55!important;opacity:.78!important;cursor:not-allowed!important;transform:none!important}
+@media(max-width:700px){
+    .room-page{padding:8px 1vw 18px}
+    .room-frame{min-height:420px;aspect-ratio:4/3}
+    .khoa-sprite{height:55%;left:43%;max-width:27%}
+    .phone-notification{width:46%;padding:9px}
+    .notification-head{font-size:7px}
+    .notification-message{font-size:18px}
+    .room-title{font-size:7px}
+    .bathroom-page{padding:8px 1vw 18px}
+    .bathroom-frame{min-height:420px;aspect-ratio:4/3}
+    .bathroom-title{font-size:7px}
+    .chat-panel{padding:12px}
+    .chat-avatar{width:58px;height:76px}
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -307,11 +398,11 @@ else:
           [data-testid="stElementContainer"] { margin: 0 !important; }
           iframe[title="ride_game"] {
             display: block !important; width: 100% !important;
-            min-height: 0 !important; height: 100svh !important; border: 0 !important; margin: 0 !important;
+            min-height: 100vh !important; border: 0 !important; margin: 0 !important;
           }
         </style>
         """, unsafe_allow_html=True)
-        game_result = ride_game(key="ride_game_surface", height=420, scrolling=False, default=None)
+        game_result = ride_game(key="ride_game_surface", height=760, scrolling=False, default=None)
         # Component value is sent only when the player presses the victory Continue button.
         # Accept the normal scalar value and mapping-shaped values for compatibility.
         game_won = (
@@ -335,7 +426,7 @@ else:
           [data-testid="stElementContainer"] { margin: 0 !important; }
           iframe[title="restaurant_date"] {
             display: block !important; width: 100% !important;
-            min-height: 0 !important; height: 100svh !important; border: 0 !important; margin: 0 !important;
+            min-height: 100vh !important; border: 0 !important; margin: 0 !important;
           }
         </style>
         """, unsafe_allow_html=True)
