@@ -118,6 +118,30 @@ st.markdown("""
     pointer-events: auto !important;
   }
 }
+
+/* Landscape-phone layout: mirror the desktop composition without mobile stacking. */
+@media screen and (orientation: landscape) and (max-height: 520px) and (pointer: coarse) {
+  html, body, .stApp, [data-testid="stAppViewContainer"],
+  [data-testid="stMain"], [data-testid="stMainBlockContainer"] {
+    width:100vw !important; min-width:0 !important; height:100svh !important;
+    min-height:0 !important; overflow:hidden !important;
+  }
+  [data-testid="stMainBlockContainer"] {
+    padding:0 !important; margin:0 !important; max-width:none !important;
+  }
+  [data-testid="stVerticalBlock"] { gap:0 !important; }
+  [data-testid="stElementContainer"] { margin:0 !important; }
+  .stButton { width:auto !important; }
+  .stButton > button { min-height:38px !important; padding:6px 14px !important; font-size:clamp(12px,2.2vh,16px) !important; }
+  iframe[title="ride_game"], iframe[title="restaurant_date"],
+  iframe[title="wash_face_game"], iframe[title="shave_drag_game"] {
+    display:block !important; width:100vw !important; height:100svh !important;
+    min-height:100svh !important; max-height:100svh !important;
+    border:0 !important; margin:0 !important;
+  }
+  .room-page, .bathroom-page, .title-background { width:100vw !important; height:100svh !important; }
+}
+
 </style>
 """, unsafe_allow_html=True)
 

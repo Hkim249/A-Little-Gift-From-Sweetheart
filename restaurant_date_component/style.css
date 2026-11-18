@@ -3,26 +3,11 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#241d2d;fon
 .date-stage{position:relative;width:100%;height:min(760px,56.25vw,100dvh);min-height:520px;max-width:1280px;margin:0 auto;overflow:hidden;background:#241d2d;isolation:isolate;image-rendering:pixelated}
 /* Portrait-phone gate: the interactive scene cannot be played until landscape. */
 .rotate-prompt{display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;padding:22px;background:radial-gradient(ellipse at center,#563449,#1c1420 78%);color:#fff4ec;text-align:center;font-family:Arial,sans-serif;letter-spacing:normal}
-.rotate-card{width:min(460px,100%);max-height:94dvh;overflow:auto;padding:22px 22px 24px;border:2px solid #d69a9d;border-radius:18px;background:rgba(43,24,39,.97);box-shadow:0 16px 48px rgba(0,0,0,.4)}
-.rotate-illustration{height:112px;display:flex;align-items:center;justify-content:center;gap:18px;margin:0 auto 10px;color:#ffc4c8}
-.phone{position:relative;border:4px solid #f7d9d1;border-radius:12px;background:linear-gradient(145deg,#6f3a50,#2c1d31);box-shadow:0 5px 0 rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.12)}
-.phone:before{content:"";position:absolute;top:4px;left:50%;width:18px;height:3px;border-radius:4px;background:#f7d9d1;transform:translateX(-50%)}
-.phone:after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;border-radius:50%;background:#f7d9d1;transform:translateX(-50%)}
-.phone-portrait{width:43px;height:76px;animation:phoneTilt 2.4s ease-in-out infinite}
-.phone-landscape{width:76px;height:43px;border-color:#ffc4c8;box-shadow:0 0 18px rgba(255,196,200,.24)}
-.phone-landscape:before{top:50%;left:4px;width:3px;height:15px;transform:translateY(-50%)}
-.phone-landscape:after{bottom:auto;left:auto;right:4px;top:50%;transform:translateY(-50%)}
-.rotate-arrow{font-size:38px;line-height:1;color:#ffc4c8;animation:arrowPulse 1.2s ease-in-out infinite}
-@keyframes phoneTilt{0%,20%{transform:rotate(0)}65%,85%{transform:rotate(90deg)}100%{transform:rotate(90deg)}}
-@keyframes arrowPulse{50%{transform:rotate(35deg) scale(1.12)}}
-.rotate-card h1{font-size:clamp(22px,5vw,30px);margin:0 0 8px}
-.rotate-card p{font-size:15px;line-height:1.48;margin:0 0 12px}
-.rotate-card .rotate-lead{color:#f8d9d8}
-.rotate-steps{margin:0 0 13px;padding-left:24px;text-align:left;color:#fff4ec;font-size:14px;line-height:1.55}
-.rotate-steps li{padding-left:3px;margin:3px 0}
-.rotate-help{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.08);font-size:13px!important;color:#f4d8d8}
-.rotate-card button{border:2px solid #f3c6c7;border-radius:10px;padding:12px 18px;background:#8c4057;color:#fff8f1;font-size:16px;font-weight:700;cursor:pointer}
-@media(max-height:620px){.rotate-card{padding:12px 18px}.rotate-illustration{height:72px;margin-bottom:4px}.phone-portrait{height:58px}.rotate-card h1{font-size:22px}.rotate-card p{font-size:13px}.rotate-steps{font-size:12px;line-height:1.35}.rotate-help{font-size:12px!important;margin-bottom:8px!important}}
+.rotate-card{width:min(420px,100%);padding:28px 22px;border:2px solid #d69a9d;border-radius:18px;background:rgba(43,24,39,.96);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.rotate-icon{font-size:64px;line-height:1;color:#ffc4c8;transform:rotate(-90deg);margin-bottom:12px}
+.rotate-card h1{font-size:clamp(22px,5vw,30px);margin:0 0 10px}
+.rotate-card p{font-size:16px;line-height:1.5;margin:0 0 20px}
+.rotate-card button{border:2px solid #f3c6c7;border-radius:10px;padding:12px 18px;background:#8c4057;color:#fff8f1;font-size:16px;font-weight:700}
 @media (pointer:coarse) and (orientation:portrait) and (max-width:900px){.rotate-prompt{display:flex}.date-stage{height:100dvh;min-height:0;max-width:none}}
 .scene{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .9s ease;isolation:isolate}
 .scene.active{opacity:1;visibility:visible}
@@ -86,3 +71,23 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#241d2d;fon
 .letter-bottom-flourish{position:relative;flex:0 0 auto;text-align:center;padding-top:7px;color:#a35d68;font-size:16px;letter-spacing:3px}
 @keyframes letterUnfold{0%{opacity:0;transform:translateY(30px) scale(.92) rotateX(8deg)}100%{opacity:1;transform:translateY(0) scale(1) rotateX(0)}}
 @media(max-width:700px){.letter-scene{padding:10px}.letter-paper{width:100%;height:96%;padding:22px 20px 12px;border-width:3px}.letter-content{font-size:15px;line-height:1.55}.letter-content p{margin-bottom:12px}.letter-top-decoration:before,.letter-top-decoration:after{width:18%;margin:0 8px}}
+
+
+/* Phone landscape: preserve the laptop's side-by-side visual novel layout. */
+@media screen and (orientation:landscape) and (max-height:520px) {
+  html,body { width:100vw!important;height:100svh!important;min-height:0!important;overflow:hidden!important; }
+  .date-stage { width:100vw!important;height:100svh!important;min-height:0!important;max-height:100svh!important;border:0!important;border-radius:0!important; }
+  .entrance-scene,.inside-scene { width:100%;height:100%; }
+  .restaurant-bg,.inside-bg { background-size:100% 100%!important;background-position:center!important; }
+  .couple-walk { width:clamp(210px,34vw,420px)!important;max-height:78%!important; }
+  .couple-shadow { width:35vw!important;height:11vh!important; }
+  .dinner-girl,.dinner-boy { height:52%!important;max-height:58vh!important;bottom:19%!important; }
+  .dinner-girl { left:19%!important; }
+  .dinner-boy { right:19%!important; }
+  .gift-letter { width:clamp(42px,6vw,76px)!important; }
+  .dialogue-panel { width:min(86vw,900px)!important;min-height:0!important;height:auto!important;max-height:34svh!important;bottom:2.5%!important;padding:7px 12px!important;gap:9px!important; }
+  .dialogue-avatar { width:clamp(48px,9vh,78px)!important;height:clamp(55px,19vh,96px)!important;flex-basis:clamp(48px,9vh,78px)!important; }
+  .dialogue-name { font-size:clamp(10px,2.5vh,13px)!important;padding:3px 8px!important; }
+  .dialogue-bubble { min-height:0!important;padding:7px 10px!important;font-size:clamp(10px,2.5vh,14px)!important;line-height:1.35!important; }
+  .scene-finish { font-size:clamp(28px,7vh,52px)!important; }
+}

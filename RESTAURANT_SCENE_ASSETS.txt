@@ -1,0 +1,17 @@
+CẢNH HẸN HÒ NHÀ HÀNG – ASSET MAP
+
+restaurant_date_component/assets/restaurant_background.jpg : nền cảnh bước vào nhà hàng (giữ nguyên)
+restaurant_date_component/assets/restaurant_inside.jpg     : nền bàn ăn nhà hàng mới, không có nhân vật
+restaurant_date_component/assets/girl.png                  : sprite Hoàng Kim (áo khoác đen, áo đỏ đô, quần đen)
+restaurant_date_component/assets/boy.png                    : sprite nam chính (áo thun trắng, quần đen)
+restaurant_date_component/assets/couple_walk.png            : sprite đôi nhân vật nắm tay bước vào
+restaurant_date_component/assets/girl_portrait.png          : chân dung Hoàng Kim trong khung thoại
+restaurant_date_component/assets/letter.svg                 : phong thư riêng có niêm phong trái tim
+restaurant_date_component/assets/couple_shadow.png         : bóng đổ dưới chân trong cảnh bước vào
+
+Trình tự tự động:
+- 0–5.9 giây: hai nhân vật bước vào nhà hàng, không có phụ đề.
+- Sau chuyển cảnh: Hoàng Kim nói lời cảm ơn.
+- Tiếp theo: Hoàng Kim nói “Em có cái này tặng cho anh. ♡”.
+- Phong thư di chuyển từ phía Hoàng Kim sang phía nam chính.
+- Kết thúc bằng biểu tượng trái tim, không có khung thoại “ngại quá đi mất rồi”.
