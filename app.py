@@ -59,6 +59,16 @@ ride_game = components.declare_component(
     path=str(GAME_COMPONENT_DIR),
 )
 
+# Automatic restaurant date scene shown immediately after the riding game is won.
+DATE_COMPONENT_DIR = Path(__file__).resolve().parent / "restaurant_date_component"
+if not (DATE_COMPONENT_DIR / "index.html").is_file():
+    st.error("Thiếu thư mục restaurant_date_component. Hãy giữ thư mục này cùng cấp với app.py.")
+    st.stop()
+restaurant_date = components.declare_component(
+    "restaurant_date",
+    path=str(DATE_COMPONENT_DIR),
+)
+
 
 st.set_page_config(
     page_title="A Little Gift From Sweetheart",
@@ -392,4 +402,26 @@ else:
           }
         </style>
         """, unsafe_allow_html=True)
-        ride_game(key="ride_game_surface", height=850, scrolling=False)
+        game_result = ride_game(key="ride_game_surface", height=760, scrolling=False)
+        if game_result == "won":
+            st.session_state.scene = "restaurant_date"
+            st.rerun()
+    elif st.session_state.scene == "restaurant_date":
+        st.markdown("""
+        <style>
+          html, body, .stApp, [data-testid="stAppViewContainer"],
+          [data-testid="stMain"], [data-testid="stMainBlockContainer"] {
+            background: #241d2b !important;
+          }
+          [data-testid="stMainBlockContainer"] {
+            padding: 0 !important; margin: 0 !important; max-width: 100% !important;
+          }
+          [data-testid="stVerticalBlock"] { gap: 0 !important; }
+          [data-testid="stElementContainer"] { margin: 0 !important; }
+          iframe[title="restaurant_date"] {
+            display: block !important; width: 100% !important;
+            min-height: 100vh !important; border: 0 !important; margin: 0 !important;
+          }
+        </style>
+        """, unsafe_allow_html=True)
+        restaurant_date(key="restaurant_date_surface", height=760, scrolling=False)
