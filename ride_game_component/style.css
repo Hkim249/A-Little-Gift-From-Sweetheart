@@ -1,0 +1,50 @@
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#241d2b;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+body{display:flex;justify-content:center;padding:0;width:100%;overflow-x:hidden}.game-wrap{width:100%;max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#463044;border:2px solid #e9bba9;border-radius:12px;padding:8px 12px}
+.lives{display:flex;align-items:center;gap:10px;font-size:22px;color:#ef454c;text-shadow:1px 2px #762b36}.lives img{width:42px;height:42px;object-fit:contain}
+.stage-label{font-weight:900;letter-spacing:1px;color:#ffcfb5}.pause{background:#382536;color:white;border:2px solid #f4cbb8;border-radius:9px;padding:5px 15px;font-size:22px;cursor:pointer}
+.game-frame{position:relative;width:100%;margin:0;border:3px solid #8e6575;border-radius:13px;overflow:hidden;background:#4d3c51;touch-action:none}
+canvas{display:block;width:100%;height:auto;max-width:100%;margin:0;touch-action:none;user-select:none}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:14px;background:#21182bd9;text-align:center}
+.overlay.hidden{display:none}.dialog{width:min(440px,100%);padding:22px 20px;background:#493044;border:3px solid #f5c6b5;border-radius:16px;box-shadow:0 7px #211827}
+.dialog h1{font-size:clamp(20px,4vw,28px);color:#ffcfb5;margin:5px 0 12px}.dialog p{line-height:1.55;font-size:14px;color:#f8e4dc}.dialog .emoji{font-size:38px}.instructions{background:#392536;border-radius:9px;padding:10px}
+button{font:inherit;font-weight:900;cursor:pointer}.dialog button,.controls button{border:2px solid #ffe0cb;border-radius:10px;background:#bd3e47;color:white;padding:12px 17px;box-shadow:0 4px #70252e}.dialog button{width:100%;margin-top:8px}
+.dialog button:active{transform:translateY(3px);box-shadow:0 1px #70252e}
+.help{text-align:center;color:#f1d1c8;font-size:12px;margin:0;line-height:1.5}
+.message-card{display:flex;align-items:center;gap:12px;text-align:left;background:linear-gradient(135deg,#f7a9c8,#ffe0e4);color:#402539;border:2px solid #a54c70;border-radius:12px;padding:12px;margin:12px 0}
+.message-card img{width:76px;height:76px;object-fit:contain;flex-shrink:0}.message-card strong{display:block;margin-bottom:5px;color:#762d51}.message-card p{color:#402539;margin:0;font-size:14px}
+@media(max-width:520px){body{padding:8px 5px}.topbar{padding:5px 8px}.lives{font-size:18px}.lives img{width:34px;height:34px}.dialog{padding:15px}.dialog p{font-size:12px}}
+
+/* Romantic restaurant date scene */
+.date-scene{position:relative;width:min(100%,1000px);height:clamp(520px,65vw,650px);margin:0 auto;border:3px solid #b77c73;border-radius:14px;overflow:hidden;background:#382536;color:#fff;isolation:isolate}
+.date-scene.hidden{display:none}.date-backdrop{position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(38,22,35,.10),rgba(38,22,35,.06) 55%,rgba(38,22,35,.28)),url('assets/background/restaurant.png');background-size:cover;background-position:center;z-index:-2}
+.date-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 55% 45%,rgba(255,214,154,.12),transparent 55%);pointer-events:none;z-index:-1}
+.date-heading{position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;text-shadow:0 2px 5px #3a1e2b;background:rgba(54,31,44,.78);border:2px solid #e7b98f;border-radius:12px;padding:9px 20px;white-space:nowrap}
+.date-heading span{font-size:11px;letter-spacing:3px;color:#ffd9b0}.date-heading strong{font-size:clamp(14px,2.5vw,21px);color:#fff0d9;letter-spacing:1px}
+.couple-stage{position:absolute;left:50%;bottom:105px;transform:translateX(-50%);width:340px;height:245px;display:flex;align-items:flex-end;justify-content:center;transition:transform 2.2s cubic-bezier(.2,.7,.25,1)}
+.date-character{position:relative;width:112px;height:225px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;filter:drop-shadow(3px 5px 2px rgba(45,23,29,.3));animation:dateBob 1.7s ease-in-out infinite}
+.date-character.girl{animation-delay:.2s}.char-head{position:relative;z-index:3;width:86px;height:86px;border:3px solid #5d3540;border-radius:50%;background:#f4c7b4;overflow:hidden;box-shadow:0 2px 0 #f6d5b2}.char-head img{width:100%;height:100%;object-fit:cover}.girl-head img{object-fit:cover;transform:scale(1.16)}
+.char-body{position:relative;margin-top:-4px;width:82px;height:91px;border:3px solid #563541;border-radius:24px 24px 10px 10px;background:linear-gradient(90deg,#e9d3c2,#fff0dc 50%,#d7b6a7)}
+.boy-body{background:linear-gradient(90deg,#30364d,#56617c 50%,#30364d);border-radius:18px 18px 9px 9px}.shirt-collar{position:absolute;top:0;left:28px;width:24px;height:20px;background:#f5e5d5;clip-path:polygon(0 0,100% 0,50% 100%)}
+.girl-body{height:102px;width:91px;border-radius:22px 22px 42px 42px;background:linear-gradient(90deg,#9c315b,#e76d91 50%,#9c315b);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%)}.dress-bow{position:absolute;top:8px;left:34px;color:#ffe4b7;font-size:19px}
+.char-leg{position:absolute;z-index:-1;top:167px;width:22px;height:52px;background:#29283b;border:2px solid #4a303e;border-radius:5px 5px 9px 9px}.leg-left{left:33px;transform:rotate(3deg)}.leg-right{right:33px;transform:rotate(-3deg)}
+.joined-hands{position:absolute;z-index:5;top:91px;left:calc(50% - 11px);width:22px;height:22px;border-radius:50%;background:#f5c2a7;border:2px solid #75424b;display:grid;place-items:center;color:#c34e76;font-size:14px}
+.date-caption{position:absolute;left:50%;bottom:72px;transform:translateX(-50%);width:min(90%,600px);padding:10px 15px;border:2px solid #e7b98f;border-radius:12px;background:rgba(55,32,46,.88);text-align:center;color:#fff0dc;font-size:14px}
+.date-actions{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:min(90%,340px)}.date-actions button,.date-toast button{width:100%;padding:13px 15px;border:2px solid #ffe4c5;border-radius:11px;background:#b83e56;color:white;box-shadow:0 4px #70283e;font-weight:900;letter-spacing:.4px}
+.date-toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(88%,390px);display:flex;flex-direction:column;gap:10px;padding:20px;background:rgba(65,38,52,.95);border:2px solid #f0c49a;border-radius:16px;text-align:center;box-shadow:0 8px 30px #24131f88}.date-toast.hidden{display:none}.date-toast strong{color:#ffe1bd;font-size:17px}.date-toast span{font-size:13px;color:#f9e8dc}
+.date-scene.walking .couple-stage{transform:translate(105px,0)}.date-scene.walking .date-character{animation:dateWalk .32s ease-in-out infinite alternate}.date-scene.inside .date-backdrop{background-position:85% center;filter:brightness(1.08)}.date-scene.inside .couple-stage{transform:translate(115px,-18px) scale(.88)}
+@keyframes dateBob{0%,100%{translate:0 0}50%{translate:0 -4px}}@keyframes dateWalk{from{translate:0 0}to{translate:0 -7px}}
+@media(max-width:600px){.date-scene{height:560px}.couple-stage{bottom:110px;transform:translateX(-50%) scale(.82);transform-origin:bottom center}.date-scene.walking .couple-stage{transform:translate(35px,0) scale(.82)}.date-heading{top:12px;padding:8px 10px}.date-caption{font-size:12px;bottom:72px}.date-toast{top:44%}}
+
+.hidden{display:none!important}
+.date-character:after{content:"";position:absolute;z-index:4;top:102px;width:48px;height:16px;border:2px solid #70434a;border-radius:10px;background:#e9c6b2}
+.date-character.boy:after{right:-10px;transform:rotate(18deg);background:#59617b}
+.date-character.girl:after{left:-10px;transform:rotate(-18deg);background:#d95d84}
+
+/* Full-width component layout inside Streamlit iframe */
+html,body{width:100%;min-width:0}
+body.date-mode{display:block;padding:0;margin:0}
+body.date-mode .game-wrap{width:100%;max-width:none;margin:0;padding:0;gap:0}
+body.date-mode .date-scene{width:100%;max-width:none;height:clamp(520px,65vw,650px);margin:0;border-radius:0;border-left:0;border-right:0}
+body.date-mode .date-backdrop{background-size:100% 100%;background-position:center center}
+@media(max-width:600px){body{padding:0}.game-wrap{width:100%}.game-frame{border-radius:0;border-left:0;border-right:0}}
