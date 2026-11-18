@@ -1,6 +1,6 @@
 (()=>{
 const $=id=>document.getElementById(id);
-const entrance=$('entranceScene'),inside=$('insideScene'),text=$('dialogueText'),panel=$('dialoguePanel'),girl=$('dinnerGirl'),boy=$('dinnerBoy'),heart=$('finishHeart');
+const entrance=$('entranceScene'),inside=$('insideScene'),letterScene=$('letterScene'),text=$('dialogueText'),panel=$('dialoguePanel'),girl=$('dinnerGirl'),boy=$('dinnerBoy'),heart=$('finishHeart');
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function typeLine(line){return new Promise(resolve=>{let i=0;text.textContent='';const timer=setInterval(()=>{text.textContent+=line.charAt(i++);if(i>=line.length){clearInterval(timer);resolve()}},38)})}
 async function showLine(line){panel.classList.add('show');await typeLine(line)}
@@ -25,6 +25,10 @@ async function runDate(){
   boy.src='assets/characters/nam_chinh/seated_receive_gift.png';
   await sleep(1400);
   panel.classList.remove('show');heart.classList.add('show');
+  // Once the male lead has received the single envelope, transition to Hoàng Kim's full letter.
+  await sleep(1100);
+  inside.classList.remove('active');inside.setAttribute('aria-hidden','true');
+  letterScene.classList.add('show');letterScene.setAttribute('aria-hidden','false');
 }
 runDate();
 })();
