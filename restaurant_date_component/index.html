@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>A Little Date</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="date-stage" id="dateStage" aria-label="Buổi hẹn hò tại nhà hàng">
+    <section class="entrance-scene" id="entranceScene" aria-label="Hai nhân vật bước vào nhà hàng">
+      <div class="restaurant-bg"></div>
+      <div class="warm-overlay"></div>
+      <div class="ambient-lights"></div>
+      <div class="couple-shadow"></div>
+      <img class="couple-walk" src="assets/couple_walk.png" alt="Đăng Khoa và Hoàng Kim nắm tay nhau bước vào nhà hàng">
+    </section>
+
+    <section class="inside-scene" id="insideScene" aria-label="Buổi trò chuyện bên bàn ăn" aria-hidden="true">
+      <div class="inside-bg"></div>
+      <div class="inside-vignette"></div>
+      <div class="dinner-couple" id="dinnerCouple">
+        <img class="dinner-girl" src="assets/girl.png" alt="Hoàng Kim">
+        <img class="dinner-boy" src="assets/boy.png" alt="Đăng Khoa">
+        <img class="gift-letter" id="giftLetter" src="assets/letter.svg" alt="Bức thư nhỏ có niêm phong trái tim">
+      </div>
+      <div class="dialogue-panel" id="dialoguePanel">
+        <img class="dialogue-avatar" src="assets/girl_portrait.png" alt="Hoàng Kim">
+        <div class="dialogue-content">
+          <div class="dialogue-name">Hoàng Kim <span>♥</span></div>
+          <div class="dialogue-bubble">
+            <span id="dialogueText"></span><span class="typing-cursor" aria-hidden="true">▌</span>
+          </div>
+        </div>
+      </div>
+      <div class="scene-finish" id="sceneFinish" aria-hidden="true"><span>♡</span></div>
+    </section>
+  </main>
+  <script src="date.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      window.parent.postMessage({isStreamlitMessage:true,type:'streamlit:componentReady',apiVersion:1}, '*');
+      window.parent.postMessage({isStreamlitMessage:true,type:'streamlit:setFrameHeight',height:Math.max(document.documentElement.scrollHeight,700)}, '*');
+    });
+    window.addEventListener('resize', () => {
+      window.parent.postMessage({isStreamlitMessage:true,type:'streamlit:setFrameHeight',height:Math.max(document.documentElement.scrollHeight,700)}, '*');
+    });
+  </script>
+</body>
+</html>

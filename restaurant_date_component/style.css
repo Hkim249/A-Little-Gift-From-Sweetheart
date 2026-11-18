@@ -1,0 +1,58 @@
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#241d2b}
+body{font-family:Georgia,'Times New Roman',serif}
+.date-stage{position:relative;width:100%;height:min(100vh,760px);min-height:520px;overflow:hidden;background:#342331;isolation:isolate}
+.entrance-scene,.inside-scene{position:absolute;inset:0;overflow:hidden}
+.entrance-scene{opacity:1;visibility:visible;transition:opacity .9s ease,visibility .9s ease}
+.restaurant-bg{position:absolute;inset:0;background:url('assets/restaurant_background.jpg') center center/cover no-repeat;z-index:-4}
+.warm-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,16,27,.03),rgba(42,20,30,.04) 58%,rgba(42,20,30,.22));z-index:-3}
+.ambient-lights{position:absolute;inset:0;background:radial-gradient(ellipse at 23% 62%,rgba(255,193,113,.18),transparent 34%),radial-gradient(ellipse at 75% 30%,rgba(255,217,155,.14),transparent 38%);animation:glow 3.8s ease-in-out infinite alternate;pointer-events:none;z-index:-2}
+.couple-shadow{position:absolute;width:min(48vw,580px);height:95px;left:50%;bottom:4%;transform:translateX(-5%);background:url('assets/couple_shadow.png') center/100% 100% no-repeat;opacity:.55;filter:blur(3px);animation:shadowWalk 5.8s cubic-bezier(.2,.72,.24,1) forwards}
+.couple-walk{position:absolute;width:clamp(280px,43vw,590px);height:auto;max-height:84%;object-fit:contain;left:53%;bottom:3%;transform-origin:50% 100%;filter:drop-shadow(0 7px 5px rgba(40,19,30,.28));animation:walkIntoRestaurant 5.8s cubic-bezier(.2,.72,.24,1) forwards,step .34s ease-in-out 0s 16 alternate}
+.inside-scene{opacity:0;visibility:hidden;transform:scale(1.025);transition:opacity 1s ease,transform 1.2s ease,visibility 1s ease;background:#33232e}
+.inside-bg{position:absolute;inset:0;background:url('assets/restaurant_inside.jpg') center center/cover no-repeat;image-rendering:pixelated}
+.inside-vignette{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,14,25,.03),rgba(29,15,26,.08) 48%,rgba(27,14,24,.25));pointer-events:none}
+.date-stage.inside-active .entrance-scene{opacity:0;visibility:hidden}
+.date-stage.inside-active .inside-scene{opacity:1;visibility:visible;transform:scale(1)}
+.dinner-couple{position:absolute;inset:0;pointer-events:none}
+.dinner-girl,.dinner-boy{position:absolute;bottom:18%;height:58%;width:auto;object-fit:contain;object-position:bottom center;filter:drop-shadow(3px 5px 3px rgba(31,16,24,.35));image-rendering:pixelated;clip-path:inset(0 0 22% 0)}
+.dinner-girl{left:17%;height:59%;transform:scaleX(-1);transform-origin:center bottom;animation:girlSettle .8s ease-out both}
+.dinner-boy{right:17%;height:59%;animation:boySettle .8s ease-out both}
+.gift-letter{position:absolute;width:clamp(65px,8vw,108px);height:auto;left:43%;bottom:31%;opacity:0;transform:scale(.6) rotate(-8deg);filter:drop-shadow(2px 3px 2px rgba(35,15,25,.4));transition:left 1.25s cubic-bezier(.2,.8,.2,1),bottom 1.25s ease,transform .7s ease,opacity .35s ease}
+.gift-letter.letter-move{opacity:1;left:54%;bottom:32%;transform:scale(1) rotate(5deg)}
+.dialogue-panel{position:absolute;left:50%;bottom:4.5%;transform:translate(-50%,22px);width:min(92%,900px);min-height:150px;display:flex;align-items:flex-end;gap:18px;padding:16px 20px 18px;background:rgba(37,25,37,.96);border:4px solid #e7b77e;box-shadow:0 0 0 4px #5a3547,7px 8px 0 rgba(25,13,23,.55);opacity:0;visibility:hidden;transition:opacity .5s ease,transform .5s ease,visibility .5s ease;z-index:5}
+.dialogue-panel.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.dialogue-avatar{width:116px;height:142px;flex:0 0 116px;object-fit:contain;object-position:top center;align-self:flex-end;image-rendering:pixelated;filter:drop-shadow(3px 3px 0 rgba(0,0,0,.35))}
+.dialogue-content{position:relative;flex:1;min-width:0;padding-top:13px}
+.dialogue-name{position:absolute;left:0;top:-13px;transform:translateY(-100%);padding:7px 15px;color:#fff0d7;background:#8b4e65;border:3px solid #edc18d;box-shadow:3px 3px 0 #3b2536;font:700 16px 'Courier New',monospace;letter-spacing:.4px}
+.dialogue-name span{color:#ffc5d5}
+.dialogue-bubble{min-height:76px;padding:15px 18px;color:#fff3e2;background:#f8e5d0;border:3px solid #d9a879;box-shadow:inset 0 0 0 2px #fff8ed,4px 4px 0 #211721;font:700 clamp(14px,1.65vw,19px)/1.65 'Courier New',monospace;overflow-wrap:anywhere}
+.dialogue-bubble #dialogueText{color:#57384b}
+.typing-cursor{display:inline-block;margin-left:3px;color:#9d536b;animation:blink .7s steps(2,start) infinite}
+.scene-finish{position:absolute;left:50%;top:17%;transform:translate(-50%,10px) scale(.5);opacity:0;color:#ffb6cf;font-size:clamp(42px,6vw,78px);text-shadow:0 0 18px rgba(255,114,168,.8);transition:all .8s ease;z-index:4;pointer-events:none}
+.scene-finish.show{opacity:1;transform:translate(-50%,0) scale(1);animation:heartFloat 2.2s ease-in-out infinite alternate}
+@keyframes walkIntoRestaurant{0%{left:54%;bottom:2%;transform:translateX(0) scale(1)}18%{transform:translateX(-3vw) scale(1.02)}58%{left:31%;bottom:12%;transform:translateX(-4vw) scale(.78)}82%{left:22%;bottom:19%;transform:translateX(-3vw) scale(.62)}100%{left:19%;bottom:21%;transform:translateX(-3vw) scale(.58)}}
+@keyframes step{0%{margin-bottom:0}100%{margin-bottom:7px}}
+@keyframes shadowWalk{0%{left:56%;opacity:.55;transform:translateX(-5%) scale(1)}100%{left:20%;opacity:.18;transform:translateX(-5%) scale(.58)}}
+@keyframes glow{from{opacity:.65}to{opacity:1}}
+@keyframes blink{to{visibility:hidden}}
+@keyframes girlSettle{from{transform:translateY(14px) scaleX(-1)}to{transform:translateY(0) scaleX(-1)}}
+@keyframes boySettle{from{transform:translateY(14px)}to{transform:translateY(0)}}
+@keyframes heartFloat{from{margin-top:0}to{margin-top:-13px}}
+@media(max-width:650px){
+ .date-stage{height:100vh;min-height:520px}
+ .restaurant-bg{background-size:auto 100%;background-position:42% center}
+ .couple-walk{width:min(74vw,440px);left:39%;bottom:6%;animation-name:walkIntoRestaurantMobile,step}
+ .couple-shadow{width:75vw;bottom:7%;animation-name:shadowWalkMobile}
+ .inside-bg{background-position:52% center}
+ .dinner-girl{left:4%;height:49%;bottom:22%}
+ .dinner-boy{right:4%;height:49%;bottom:22%}
+ .gift-letter{width:64px;left:43%;bottom:33%}
+ .gift-letter.letter-move{left:55%;bottom:34%}
+ .dialogue-panel{width:94%;min-height:126px;bottom:4%;gap:8px;padding:12px 10px 13px}
+ .dialogue-avatar{width:82px;height:112px;flex-basis:82px}
+ .dialogue-name{font-size:13px;padding:5px 10px}
+ .dialogue-bubble{min-height:72px;padding:10px 11px;font-size:13px;line-height:1.55}
+}
+@keyframes walkIntoRestaurantMobile{0%{left:42%;bottom:5%;transform:scale(1)}55%{left:14%;bottom:16%;transform:scale(.75)}100%{left:5%;bottom:19%;transform:scale(.62)}}
+@keyframes shadowWalkMobile{0%{left:42%;opacity:.55;transform:translateX(-5%) scale(1)}100%{left:5%;opacity:.18;transform:translateX(-5%) scale(.62)}}
